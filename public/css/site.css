@@ -1,0 +1,198 @@
+.parsley-errors-list.filled {
+    margin-top: 10px;
+    margin-bottom: 0;
+    padding: 15px 20px;
+    position: relative;
+    background-color: #eb6357;
+    color: #FFF
+}
+
+.parsley-errors-list.filled:after {
+    display: inline-block;
+    position: absolute;
+    top: -6px;
+    left: 20px;
+    width: 0;
+    height: 0;
+    content: '';
+    z-index: 2;
+    border-bottom: 7px solid #eb6357;
+    -moz-transform: scale(.9999);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent
+}
+
+.parsley-errors-list.filled>li {
+    list-style: none
+}
+
+.sombraLogin {
+    -webkit-box-shadow: -15px 13px 42px -5px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: -15px 13px 42px -5px rgba(0, 0, 0, 0.75);
+    box-shadow: -15px 13px 42px -5px rgba(0, 0, 0, 0.75);
+}
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+
+.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+}
+
+.dropdown-submenu:hover>a:after {
+    border-left-color: #fff;
+}
+
+.dropdown-submenu.pull-left {
+    float: none;
+}
+
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
+}
+
+a .btn:hover {
+    text-decoration: none;
+}
+
+.paginate_button {
+    padding: 5px!important;
+    text-decoration: none!important;
+    cursor: pointer !important;
+    border: 1px solid #DEE2E6 !important;
+    background-color: white!important;
+    color: #007BFF!important;
+}
+
+.paginate_button.disabled {
+    border: 1px solid #DEE2E6 !important;
+    background-color: white!important;
+    color: #6C757D!important;
+}
+
+.paginate_button.current {
+    background-color: #007BFF!important;
+    color: white!important;
+}
+
+.btnCrud {
+    margin-bottom: 0!important;
+}
+
+table.hoverable tbody tr:hover {
+    background-color: #c2e8e1!important;
+}
+
+body,
+html {
+    padding-top: 1em;
+}
+
+.glyphicon.fast-right-spinner {
+    -webkit-animation: glyphicon-spin-r 1s infinite linear;
+    animation: glyphicon-spin-r 1s infinite linear;
+}
+
+.glyphicon.normal-right-spinner {
+    -webkit-animation: glyphicon-spin-r 2s infinite linear;
+    animation: glyphicon-spin-r 2s infinite linear;
+}
+
+.glyphicon.slow-right-spinner {
+    -webkit-animation: glyphicon-spin-r 3s infinite linear;
+    animation: glyphicon-spin-r 3s infinite linear;
+}
+
+.glyphicon.fast-left-spinner {
+    -webkit-animation: glyphicon-spin-l 1s infinite linear;
+    animation: glyphicon-spin-l 1s infinite linear;
+}
+
+.glyphicon.normal-left-spinner {
+    -webkit-animation: glyphicon-spin-l 2s infinite linear;
+    animation: glyphicon-spin-l 2s infinite linear;
+}
+
+.glyphicon.slow-left-spinner {
+    -webkit-animation: glyphicon-spin-l 3s infinite linear;
+    animation: glyphicon-spin-l 3s infinite linear;
+}
+
+@-webkit-keyframes glyphicon-spin-r {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
+@keyframes glyphicon-spin-r {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
+@-webkit-keyframes glyphicon-spin-l {
+    0% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+    100% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes glyphicon-spin-l {
+    0% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+    100% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+}
+
+
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover
+{
+    background-color: #32383d;
+}

@@ -18,5 +18,6 @@ return array(
     '318355ebaab9a8118334ed1436096909' => $baseDir . '/app/Utils/json.php',
     '4a2d30a05fc32c7682ff297a69087098' => $baseDir . '/app/Utils/excel.php',
     'e79247236e090c02710865afa3c6476d' => $baseDir . '/app/Utils/strings.php',
+    'bd281ea01efe9daa48a1695f4ed03151' => $baseDir . '/app/Utils/helper.php',
     'c99f239f67af48de2c38b28c6e277e7c' => $baseDir . '/app/Utils/email.php',
 );

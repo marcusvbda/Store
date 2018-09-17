@@ -66,9 +66,13 @@ Route::group(['prefix' => 'admin'], function ()
                     Route::get('', 'Cadastros\Principais\Produtos\ProdutosController@index')->name("cadastros.principais.produtos")->middleware('can:get_produtos');
                     Route::get('create', 'Cadastros\Principais\Produtos\ProdutosController@create')->name("cadastros.principais.produtos.create")->middleware('can:post_produtos');
                     Route::post('store', 'Cadastros\Principais\Produtos\ProdutosController@store')->name("cadastros.principais.produtos.store")->middleware('can:post_produtos');
+                    Route::put('put', 'Cadastros\Principais\Produtos\ProdutosController@put')->name("cadastros.principais.produtos.put")->middleware('can:put_produtos');
                     Route::get('{id}/show', 'Cadastros\Principais\Produtos\ProdutosController@show')->name("cadastros.principais.produtos.show")->middleware('can:get_produtos');
                     Route::get('{id}/edit', 'Cadastros\Principais\Produtos\ProdutosController@edit')->name("cadastros.principais.produtos.edit")->middleware('can:get_produtos');
-                    Route::get('{produtoId}/SKU/create', 'Cadastros\Principais\Produtos\ProdutosController@skuCreate')->name("cadastros.principais.produtos.sku.create")->middleware('can:post_produtos');
+                    Route::get('{produtoId}/sku/create', 'Cadastros\Principais\Produtos\ProdutosController@skuCreate')->name("cadastros.principais.produtos.skus.create")->middleware('can:post_produtos');
+                    Route::post('{produtoId}/sku/store', 'Cadastros\Principais\Produtos\ProdutosController@skuStore')->name("cadastros.principais.produtos.skus.store")->middleware('can:post_produtos');
+                    Route::get('{produtoId}/sku/{skuId}/show', 'Cadastros\Principais\Produtos\ProdutosController@showSku')->name("cadastros.principais.produtos.skus.show")->middleware('can:get_produtos');
+                    Route::get('{produtoId}/sku/{skuId}/edit', 'Cadastros\Principais\Produtos\ProdutosController@editSku')->name("cadastros.principais.produtos.skus.edit")->middleware('can:put_produtos');
 
                     Route::group(['prefix' => 'marcas'], function () 
                     {
@@ -85,6 +89,11 @@ Route::group(['prefix' => 'admin'], function ()
                         Route::post('store', 'Cadastros\Principais\Produtos\CategoriaProdutoController@store')->name("cadastros.principais.produtos.categorias.store")->middleware('can:post_categoriaProduto');
                         Route::put('put', 'Cadastros\Principais\Produtos\CategoriaProdutoController@put')->name("cadastros.principais.produtos.categorias.put")->middleware('can:put_categoriaProduto');
                         Route::delete('delete', 'Cadastros\Principais\Produtos\CategoriaProdutoController@delete')->name("cadastros.principais.produtos.categorias.delete")->middleware('can:delete_categoriaProduto');
+
+                        Route::post('substore', 'Cadastros\Principais\Produtos\CategoriaProdutoController@substore')->name("cadastros.principais.produtos.categorias.subcategoria.store")->middleware('can:post_categoriaProduto');
+                        Route::get('getsub', 'Cadastros\Principais\Produtos\CategoriaProdutoController@getsub')->name("cadastros.principais.produtos.categorias.subcategoria.get")->middleware('can:put_categoriaProduto');
+                        Route::put('putsub', 'Cadastros\Principais\Produtos\CategoriaProdutoController@putsub')->name("cadastros.principais.produtos.categorias.subcategoria.put")->middleware('can:put_categoriaProduto');
+                        Route::delete('deletesub', 'Cadastros\Principais\Produtos\CategoriaProdutoController@deletesub')->name("cadastros.principais.produtos.categorias.subcategoria.delete")->middleware('can:delete_categoriaProduto');
                     });//categorias
                     Route::group(['prefix' => 'especificacoes'], function () 
                     {

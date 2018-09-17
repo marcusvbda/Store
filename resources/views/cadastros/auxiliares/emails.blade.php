@@ -88,6 +88,7 @@ $('#modelo').summernote({
 });
 
 var dtable = new dataTableCrud({
+    titulo : " de modelo email",
     order : 1,
     table : "#table",
     perpage : 10,

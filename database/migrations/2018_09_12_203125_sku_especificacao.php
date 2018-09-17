@@ -19,7 +19,7 @@ class SkuEspecificacao extends Migration
             $table->collation = 'utf8_unicode_ci';
             $table->string('id',50)->unique()->index()->primary();
             $table->string('nome',100)->unique();
-            $table->string('tipoCampo',20);
+            $table->enum('tipoCampo', array('TEXT', 'NUMBER', 'SELECT', 'CHECKBOX'));
             $table->longtext('opcoes')->nullable();
         });
     }

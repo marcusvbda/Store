@@ -83,10 +83,23 @@
                             <td>
                             	<div class="row">
                             		<div class="col-md-3">
-                            			<a  onclick="openRoute('{{route('cadastros.principais.produtos.sku.create',['produtoId'=>$d->id])}}')"><span class="glyphicon glyphicon-plus"></span> Novo SKU</a>
+                            			<small>
+                                    <a  onclick="openRoute('{{route('cadastros.principais.produtos.skus.create',['produtoId'=>$d->id])}}')" href="#">
+                                      <span class="glyphicon glyphicon-plus"></span> Novo Sku
+                                    </a>
+                                  </small>
                             		</div>
                             		<div class="col-md-9">
-                            			<a href="#"><span class="glyphicon glyphicon-triangle-right"></span>#2133143412
+                                  <?php 
+                                    $skus = DB::table("skus")->where("produtoId","=",$d->id)->get();
+                                  ?>
+                            			<small>
+                                    @foreach($skus as $s)
+                                      <a href="#"  onclick="openRoute('{{route('cadastros.principais.produtos.skus.show',['skuId'=>$s->id,'produtoId'=>$d->id])}}')">
+                                        <span class="glyphicon glyphicon-triangle-right"></span>{{$s->nome}}
+                                      </a>
+                                    @endforeach
+                                  </small>
                             		</div>
                             	</div>
                             </td>

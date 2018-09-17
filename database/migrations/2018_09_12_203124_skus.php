@@ -18,8 +18,21 @@ class Skus extends Migration
             $table->charset = 'utf8';
             $table->collation = 'utf8_unicode_ci';
             $table->string('id',50)->unique()->index()->primary();
+            $table->string('nome',100);
             $table->string('ean',100)->unique();
-            $table->string('codRef',100)->unique();
+            $table->string('codRef',100)->nullable();
+            $table->string('produtoId',50)->index();
+            $table->foreign('produtoId')
+                ->references('id')
+                ->on('produtos')
+                ->onDelete('restrict');   
+            $table->double('altura', 15, 8)->default(0);
+            $table->double('comprimento', 15, 8)->default(0);
+            $table->double('largura', 15, 8)->default(0);
+            $table->double('peso', 15, 8)->default(0);
+            $table->boolean('ativo')->default(0);
+            $table->date('dataCadastro');
+            $table->time('horaCadastro');
         });
     }
 

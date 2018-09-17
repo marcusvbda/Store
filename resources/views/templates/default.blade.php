@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>ezCore {{env('APP_NAME')}} - @yield('title')</title>
+    <title>@yield('title')</title>
     <link rel="stylesheet" type="text/css" href="{{asset('public/js/v-libs/v-crud/css/dttable.bootstrap.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('public/js/v-libs/v-crud/css/vcrud.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('public/js/v-libs/v-crud/css/scroller.css')}}">

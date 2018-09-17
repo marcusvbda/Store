@@ -83,6 +83,7 @@
 
 <script>
 var dtable = new dataTableCrud({
+    titulo : " de grupos de acesso",
     order: 1,
     table : "#tbgrupos",
     crud  : true,

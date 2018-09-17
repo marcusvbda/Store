@@ -25,12 +25,73 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoriaRelatorioSeed::class);
         $this->call(RelatorioSeed::class);
         $this->call(ModeloEmailSeed::class);
+        $this->call(marcasSeed::class);
+        $this->call(produtoCategoriaSeed::class);
+        $this->call(especificacoesProdutoSeed::class);
+
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }
 
+class especificacoesProdutoSeed extends Seeder 
+{
+    public function run()
+    {
+        DB::table('skuEspecificacao')->truncate();
+        DB::table('skuEspecificacao')->insert(
+        [
+            "id"          => uniqid(),
+            "nome"        => "Voltagem",
+            "tipoCampo"   => "SELECT",
+            "opcoes"      => "110,220,Bivolt",
+        ]);
+    }
+}
 
 
+class produtoCategoriaSeed extends Seeder 
+{
+    public function run()
+    {
+        DB::table('produtoCategoria')->truncate();
+        $id =  uniqid();
+        DB::table('produtoCategoria')->insert(
+        [
+            "id"          => $id,
+            "nome"        => "IMPRESSORA"
+        ]);
+        DB::table('produtoSubCategoria')->insert(
+        [
+            "id"          => uniqid(),
+            "categoriaid" => $id,
+            "nome"        => "JATO DE TINTA"
+        ]);
+        DB::table('produtoSubCategoria')->insert(
+        [
+            "id"          => uniqid(),
+            "categoriaid" => $id,
+            "nome"        => "LASER"
+        ]);
+    }
+}
+
+class marcasSeed extends Seeder 
+{
+    public function run()
+    {
+        DB::table('produtoMarca')->truncate();
+        DB::table('produtoMarca')->insert(
+        [
+            "id"          => uniqid(),
+            "nome"        => "Xerox"
+        ]);
+        DB::table('produtoMarca')->insert(
+        [
+            "id"          => uniqid(),
+            "nome"        => "Brother"
+        ]);
+    }
+}
 
 class tenantsSeed extends Seeder 
 {

@@ -4,6 +4,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\DefaultCrudController;
+use Illuminate\Http\Request;
+
 
 class CategoriaProdutoController extends DefaultCrudController
 {
@@ -49,16 +51,24 @@ class CategoriaProdutoController extends DefaultCrudController
 
     public function store()
     {
+        $_POST["nome"] = strtoupper($_POST["nome"]);
+        return parent::store();
+    }
+
+    public function put()
+    {
+        $_POST["nome"] = strtoupper($_POST["nome"]);
+        return parent::put();
+    }
+
+    public function substore()
+    {
         try 
         {
-            $subCategorias = explode(",",$_POST["sub"]);
-            unset($_POST["_token"],$_POST["_method"],$_POST["sub"]);
-            $_POST["id"] = uniqid();        
-            $data = DB::table($this->table)->insert($_POST);
-            foreach($subCategorias as $sub)
-            {
-                DB::table("produtoSubCategoria")->insert(["id" => uniqid(), "categoriaId" => $_POST["id"] , "nome" => trim($sub) ]);
-            }
+            unset($_POST["_token"],$_POST["_method"]);
+            $_POST["id"] = uniqid();    
+            $_POST["nome"] = strtoupper($_POST["nome"]);      
+            $data = DB::table("produtoSubCategoria")->insert($_POST);
             return redirect()->route($this->route);
         } 
         catch (\Exception $e) 
@@ -66,8 +76,55 @@ class CategoriaProdutoController extends DefaultCrudController
             $message = $e->getMessage();
             return view("errors.500",compact("message"));
         }
-
     }
+
+    public function deletesub(Request $request)
+    {
+        try 
+        {
+            $data = DB::table("produtoSubCategoria")->where("id","=",$request->only("id"));
+            $data->delete();
+            return response()->json(["code"=>202,"success"=>true]);
+        } 
+        catch (\Exception $e) 
+        {
+            return response()->json(["code"=>202,"success"=>false,"message" => $e->getMessage()]);
+        }
+    }
+
+    public function putsub()
+    { 
+        try 
+        {
+            unset($_POST["_token"],$_POST["_method"]);
+            $_POST["nome"] = strtoupper($_POST["nome"]);
+            $data = DB::table("produtoSubCategoria")->where("id","=",$_POST["id"]);
+            $data = $data->update($_POST);
+            return redirect()->route($this->route);
+        } 
+        catch (\Exception $e) 
+        {
+            $message = $e->getMessage();
+            return view("errors.500",compact("message"));
+        }
+    }
+
+    public function getsub()
+    { 
+        try 
+        {
+            $data = DB::table("produtoSubCategoria")->where("id","=",$_GET["id"]);
+            $data = $data->first();
+
+            return response()->json(["code"=>202,"success"=>true,"data"=>$data]);
+        } 
+        catch (\Exception $e) 
+        {
+            return response()->json(["code"=>202,"success"=>false,"message" => $e->getMessage()]);
+        }
+    }
+
+
 
 
 }

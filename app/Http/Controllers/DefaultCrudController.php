@@ -97,8 +97,6 @@ class DefaultCrudController extends Controller
         try 
         {
             $primaryKey = $_GET[$this->primaryKey];
-            $data = DB::table($this->table)->find($primaryKey);
-
             $data = DB::table($this->table)->where($this->primaryKey,"=",$primaryKey);
             if(Schema::hasColumn($this->table,"tenantId"))
             {

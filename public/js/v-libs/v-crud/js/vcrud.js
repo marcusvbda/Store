@@ -184,6 +184,7 @@ class dataTableCrud
             data[$(this).closest("tr").attr("primarykey")]=$(this).closest("tr").attr("value");
             vform.ajax("get",self.parametros.routeGet,data,function(response)
             {
+                // console.log(response);
                 var formInputs = $(self.parametros.table+"__formCrud__").find("input , select, textarea");
                 $(self.parametros.table+"__formCrud___method").val("");
                 $(self.parametros.table+"__formCrud__").attr("method","");
@@ -245,7 +246,7 @@ class dataTableCrud
                 
                 $(self.parametros.table+"__CRUD__").dialog(
                 {
-                    modal: true, title: "Visualização", zIndex: 10000, autoOpen: true,
+                    modal: true, title: "Visualização "+self.parametros.titulo, zIndex: 10000, autoOpen: true,
                     width: self.parametros.size, resizable: false, draggable: true,
                     open: function (event, ui) 
                     {
@@ -333,7 +334,7 @@ class dataTableCrud
                 }
                 $(self.parametros.table+"__CRUD__").dialog(
                 {
-                    modal: true, title: "Edição", zIndex: 10000, autoOpen: true,
+                    modal: true, title: "Edição "+self.parametros.titulo, zIndex: 10000, autoOpen: true,
                     width: self.parametros.size, resizable: false, draggable: true,
                     open: function (event, ui) {
                         if(self.parametros.summernote)
@@ -347,17 +348,8 @@ class dataTableCrud
                         $(".ui-dialog-titlebar-close", ui.dialog | ui).html("<span class='glyphicon glyphicon-remove'></span>");
                         $(".ui-dialog-titlebar-close", ui.dialog | ui).show();
                     },
-                    buttons:{
-                        cancel : 
-                        {
-                            click: function () {
-                                // param.confirm(vCrud.lang[param.lang].confirmCancel,function(callback){
-                                    $(self.parametros.table+"__CRUD__").dialog('close');
-                                // });
-                            },
-                            class: 'btn btn-danger',
-                            text: "Cancelar"
-                        },
+                    buttons:
+                    {
                         store : 
                         {
                             click: function () 
@@ -368,6 +360,7 @@ class dataTableCrud
                                 });
                             },
                             class: 'btnConfirm__formCrud__ btn btn-primary',
+                            style: 'margin-right:0',
                             text:  "Salvar"
                         }
                     }
@@ -384,7 +377,7 @@ class dataTableCrud
             messageBox.confirm("Confirmação","Confirma exclusão ?",function()
             {
                 vform.ajax("delete",self.parametros.routeDelete,data,function(response){
-                    console.log(response);
+                    // console.log(response);
                     if(!response.success)
                         return messageBox.simple("Ooops",response.message,"error");
                     return location.reload();   
@@ -414,25 +407,14 @@ class dataTableCrud
             }
             $(self.parametros.table+"__CRUD__").dialog(
             {
-                modal: true, title: "Cadastro", zIndex: 10000, autoOpen: true,
-                width: self.parametros.size, resizable: false, draggable: false,
+                modal: true, title: "Cadastro "+self.parametros.titulo, zIndex: 10000, autoOpen: true,
+                width: self.parametros.size, resizable: false, draggable: true,
                 open: function (event, ui) 
                 {
-                    $(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
+                    $(".ui-dialog-titlebar-close", ui.dialog | ui).html("<span class='glyphicon glyphicon-remove'></span>");
+                    $(".ui-dialog-titlebar-close", ui.dialog | ui).show();
                 },
                 buttons:{
-                    cancel : 
-                    {
-                        click: function () 
-                        {
-                            messageBox.confirm("Confirmação","Deseja mesmo cancelar ?",function(callback)
-                            {
-                                $(self.parametros.table+"__CRUD__").dialog('close');
-                            });
-                        },
-                        class: 'btn btn btn-danger',
-                        text: "Cancelar"
-                    },
                     store : 
                     {
                         click: function () 

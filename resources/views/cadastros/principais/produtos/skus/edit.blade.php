@@ -1,5 +1,5 @@
 @extends('templates.admin')
-@section('title', 'Cadastro de Sku')
+@section('title', 'Edição de Sku')
 @section('content')
 <ul class="breadcrumb" style="margin-bottom:0px;">
   <li><a href="{{route('dashboard')}}">Início</a><span class="divider"></span></li>
@@ -7,7 +7,8 @@
   <li class="active">Principais <span class="divider"></span></li>
   <li class="active"><a href="{{route('cadastros.principais.produtos')}}">Produtos</a><span class="divider"></span></li>
   <li class="active"><a href="{{route('cadastros.principais.produtos.show',['id'=>$produto->id])}}">{{$produto->nome}}</a><span class="divider"></span></li>
-  <li class="active"><strong>Cadastro de Sku</strong><span class="divider"></span></li>
+  <li class="active">Edição de Sku<span class="divider"></span></li>
+  <li class="active"><strong>{{$sku->nome}}</strong><span class="divider"></span></li>
 </ul>
 
 <div style="margin-top:15px;" id="app">
@@ -31,7 +32,7 @@
               </ul>
               <div class="tab-content ">
                   <div class="tab-pane active" id="produto" style="padding:15px;">
-                    <form id="frm" v-on:submit.prevent="cadastrar()">
+                    <form id="frm" v-on:submit.prevent="salvar()">
                       <div class="row" style="padding-bottom: 20px;">
                           <div class="col-md-3" style="padding-top: 20px;">
                             <p style="margin-bottom: 0;"><strong>Produto : </strong>{{$produto->nome}}</p>
@@ -39,19 +40,19 @@
                           </div>
                           <div class="col-md-2">
                             <label>Codigo de Referência <span class="text-danger" v-show="((frm.ean=='')||(frm.ean==null))">*</span></label>
-                            <input type="" class="form form-control" v-model="frm.codRef" :required="((frm.ean=='')||(frm.ean==null))">
+                            <input type="" class="form form-control" v-model="frm.codRef" :required="((frm.ean=='')||(frm.ean==null))" required>
                           </div>
                           <div class="col-md-3">
                             <label>Nome <span class="text-danger">*</span></label>
-                            <input type="" class="form form-control" v-model="frm.nome" required>
+                            <input type="" class="form form-control" v-model="frm.nome" required required >
                           </div>
                           <div class="col-md-3">
                             <label>EAN <span class="text-danger"  v-show="((frm.codRef=='')||(frm.codRef==null))">*</span></label>
-                            <input type="" class="form form-control" v-model="frm.ean" :required="((frm.codRef=='')||(frm.codRef==null))">
+                            <input type="" class="form form-control" v-model="frm.ean" :required="((frm.codRef=='')||(frm.codRef==null))" required >
                           </div>
                           <div class="col-md-1">
                             <label>Ativo <span class="text-danger">*</span></label>
-                            <select class="form form-control" v-model="frm.ativo" required>
+                            <select class="form form-control" v-model="frm.ativo" required required >
                                 <option value="1">SIM</option>
                                 <option value="0">NÃO</option>
                             </select>
@@ -74,7 +75,7 @@
                         </div>
                         <div class="col-md-3">
                           <label><span class="glyphicon glyphicon-circle-arrow-right"></span> Peso em gramas <span class="text-danger">*</span></label>
-                          <input type="number" class="form form-control" v-model="frm.peso" required>
+                          <input type="number" class="form form-control" v-model="frm.peso" required >
                         </div>
                         <div class="col-md-3">
                           <label><span class="glyphicon glyphicon-circle-arrow-right"></span> Altura em centimentros <span class="text-danger">*</span></label>
@@ -132,9 +133,40 @@
                     </form>
                   </div>
                   <div class="tab-pane" id="imagens"  style="padding:15px;">
-                        <div class="alert alert-warning alert-dismissable">
-                          Primeiro salve as informações da aba <strong>Sku</strong> para poder cadastrar imagens.
-                        </div>                  
+                      
+
+                      <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button class="btn btn-primary btn-sm" v-on:click="modalUploadImagem()">
+                              <span class="glyphicon glyphicon-plus"></span> Adicionar nova imagem
+                            </button>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th>Preview</th>
+                                <th>Legenda/Link</th>
+                                <th>Editar</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>teste</td>
+                                <td>teste</td>
+                                <td>teste</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                      </div>
+                    </div>
+
+
+
+
                   </div>
                   <div class="tab-pane" id="especificacoes"  style="padding:15px;">
                     <div class="alert alert-warning alert-dismissable">
@@ -153,7 +185,32 @@
   </div>
 
   
-
+  <div style="display:none;" id="formUpload">
+      <form v-on:submit.prevent="salvarImagem()">
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-md-6">
+                <label>Legenda <span class="text-danger">*</span></label>
+                <input type="text" class="form form-control" name="legenda" v-model="novaImagem.legenda" required>
+            </div>
+            <div class="col-md-6 text-left">
+                <label>Legenda <span class="text-danger">*</span></label>
+                <input type="text" class="form form-control" name="legenda" v-model="novaImagem.legenda" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-left">
+                <label>Imagem <span class="text-danger">*</span></label>
+                <input type="file" id="novaImagemFile" v-model="novaImagem.imagem" required>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <button class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-floppy-disk"></i> Salvar</button>
+            </div>
+        </div>
+    </form>
+  </div>
 
 </div>
 
@@ -164,25 +221,61 @@ var app = new Vue( {
 el: '#app',
 delimiters: ["[[","]]"],
   data:{
+      novaImagem : 
+      {
+        nome : null,
+        legenda : null,
+        imagem : null
+      },
       frm: 
       {
           produtoId : "{{$produto->id}}",
-          nome : null,
-          codRef : null,
-          ean : null,
-          peso : 0,
-          altura : 0,
-          largura : 0,
-          comprimento : 0,
-          ativo : 1,
-          sugestoes : null,
-          acessorios : null,
-          semelhantes :null
+          nome : "{{$sku->nome}}",
+          codRef : "{{$sku->codRef}}",
+          ean : "{{$sku->ean}}",
+          peso : "{{$sku->peso}}",
+          altura : "{{$sku->altura}}",
+          largura : "{{$sku->largura}}",
+          comprimento : "{{$sku->comprimento}}",
+          ativo : "{{$sku->ativo}}",
+          sugestoes : [
+            @foreach($sugestoes as $row)
+              "{{$row->id}}",
+            @endforeach
+          ],
+          acessorios : [
+            @foreach($acessorios as $row)
+              "{{$row->id}}",
+            @endforeach
+          ],
+          semelhantes : [
+            @foreach($semelhantes as $row)
+              "{{$row->id}}",
+            @endforeach
+          ]
       }
   },
   methods: 
   {
-      cadastrar: function()
+      salvarImagem : function()
+      {
+        console.log(this.novaImagem);
+      },
+      modalUploadImagem : function()
+      {
+          $("#formUpload").dialog(
+          {
+              modal: true, title: "Importação de imagens", zIndex: 10000, autoOpen: true,
+              width: "30%", resizable: false, draggable: true,
+              open: function (event, ui) 
+              {
+                  $(".ui-dialog-titlebar-close", ui.dialog | ui).html("X");
+                  $(".ui-dialog-titlebar-close", ui.dialog | ui).show();
+              },
+              buttons:{}
+          });
+      },
+      salvar: function()
       {
         var self=this;
         messageBox.confirm("Confirmação","Confirma o cadastro deste Sku ?",function()
@@ -191,7 +284,7 @@ delimiters: ["[[","]]"],
         });
       }
   }
-});   
+});  
 </script>
 
 @stop

@@ -30,6 +30,7 @@
             "app/Utils/json.php",
             "app/Utils/excel.php",
             "app/Utils/strings.php",
+            "app/Utils/helper.php",
             "app/Utils/email.php"
         ]
     },

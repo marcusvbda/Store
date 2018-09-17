@@ -1,12 +1,12 @@
 @extends('templates.admin')
-@section('title', 'Cadastro de produto')
+@section('title',  "Edição de produto")
 @section('content')
 <ul class="breadcrumb" style="margin-bottom:0px;">
   <li><a href="{{route('dashboard')}}">Início</a><span class="divider"></span></li>
   <li class="active">Cadastros <span class="divider"></span></li>
   <li class="active">Principais <span class="divider"></span></li>
   <li class="active"><a href="{{route('cadastros.principais.produtos')}}">Produtos</a><span class="divider"></span></li>
-  <li class="active"><strong>Cadastro de produto</strong><span class="divider"></span></li>
+  <li class="active"><strong>Edição de produto #{{$produto->id}}</strong><span class="divider"></span></li>
 </ul>
 <div style="margin-top:15px;" id="app">
 
@@ -18,7 +18,7 @@
                       <a  href="#produto" data-toggle="tab">Produto</a>
                   </li>
               </ul>
-              <form id="frm" v-on:submit.prevent="cadastrar()">
+              <form id="frm" v-on:submit.prevent="salvar()">
                 <div class="tab-content ">
                   <div class="tab-pane active" id="produto" style="padding:15px;">
 
@@ -71,7 +71,7 @@
                           </div>
                           <div class="col-md-4">
                             <label>Categorias <span class="text-danger">*</span></label>
-                            <select class="form form-control selectpicker"  required v-model="frm.categoriaId" data-live-search="true" v-on:change="changeCategoria()">
+                            <select class="form form-control selectpicker"  required v-model="frm.categoriaId" v-on:change="changeCategoria()" data-live-search="true">
                               <option disabled>Selecione uma opção</option>
                               @foreach($categorias as $categoria)
                                 <option value="{{$categoria->id}}">{{$categoria->nome}}</option>
@@ -81,8 +81,9 @@
                           <div class="col-md-4">
                             <label>Sub Categorias <span class="text-danger">*</span></label>
                             <select class="form form-control selectpicker" data-show-subtext="true" data-live-search="true" multiple required id="selectSubCategoria" v-model="frm.subCategorias">
+                                <option disabled >Selecione uma opção</option>
                                 @foreach($subCategorias as $sub)
-                                  <option data-subtext="{{$sub->categoria}}" class="catOption {{$sub->categoriaId}}_subOption"  style="display: none;" value="{{$sub->id}}">{{$sub->nome}}</option>
+                                  <option data-subtext="{{$sub->categoria}}"  class="catOption {{$sub->categoriaId}}_subOption" @if(in_array($sub->id, $subsSelecionados)) selected @endif style="display: none;" value="{{$sub->id}}">{{$sub->nome}}</option>
                                 @endforeach
                             </select>
                           </div>
@@ -160,26 +161,30 @@ $(function()
   delimiters: ["[[","]]"],
     data:{
         frm: {
-            codRef : null,
-            nome: null,
-            textLink : null,
-            palavrasSubstitutas : null,
-            tituloPagina : null,
-            descricaoProduto : null,
-            descricaoMeta : null,
-            subCategorias : null,
-            categoriaId : null,
-            marcaId : null
+            id : "{{$produto->id}}",
+            codRef : "{{$produto->codRef}}",
+            nome: "{{$produto->nome}}",
+            textLink : "{{$produto->textLink}}",
+            palavrasSubstitutas : "{{$produto->palavrasSubstitutas}}",
+            tituloPagina : "{{$produto->tituloPagina}}",
+            descricaoProduto : "{{$produto->descricaoProduto}}",
+            descricaoMeta : "{{$produto->descricaoMeta}}",
+            subCategorias : "{{implode(',',$subsSelecionados)}}",
+            categoriaId : "{{$produto->categoriaId}}",
+            marcaId : "{{$produto->marcaId}}"
         }
     },
     methods: 
     {
-        changeCategoria : function()
+        changeCategoria : function(refresh=true)
         {
           $(".catOption").css("display","none");
           $("."+this.frm.categoriaId+"_subOption").css("display","block");
-          this.frm.subCategorias = null;
-          $("#selectSubCategoria").val('default').selectpicker("refresh");
+          if(refresh)
+          {
+	          this.frm.subCategorias = null;
+	          $("#selectSubCategoria").val('default').selectpicker("refresh");
+	      }
         },
         exitNome : function()
         {
@@ -192,14 +197,14 @@ $(function()
               this.frm.tituloPagina = this.frm.nome;
           }
         },
-        cadastrar: function()
+        salvar: function()
         {
           var self=this;
           self.frm.especificacoes = JSON.stringify(self.frm.especificacoes);
           self.frm.descricaoProduto = $("#summernoteDescricao").summernote("code");
-          messageBox.confirm("Confirmação","Confirma o cadastro deste produto ?",function()
+          messageBox.confirm("Confirmação","Confirma o alteração deste produto ?",function()
           {
-              vform.submit('post', '{{route("cadastros.principais.produtos.store")}}', self.frm);
+              vform.submit('put', '{{route("cadastros.principais.produtos.put")}}', self.frm);
           });
         }
     }
@@ -213,8 +218,11 @@ $(function()
       ['fontsize', ['fontsize']],
       ['color', ['color']],
       ['para', ['ul', 'ol', 'paragraph']]
-    ]
+    ],
   });
+
+  $('#summernoteDescricao').summernote("code",'{!! $produto->descricaoProduto !!}');
+  app.changeCategoria(false);
 
 </script>
 

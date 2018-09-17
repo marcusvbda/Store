@@ -27,10 +27,10 @@ class Produtos extends Migration
             $table->string('codRef',100)->nullable();
             $table->date('dataCadastro');
             $table->time('horaCadastro');
-            $table->string('subCategoriaId',50)->index();
-            $table->foreign('subCategoriaId')
+            $table->string('categoriaId',50)->index();
+            $table->foreign('categoriaId')
                 ->references('id')
-                ->on('produtoSubCategoria')
+                ->on('produtoCategoria')
                 ->onDelete('restrict');   
             $table->string('marcaId',50)->index();
             $table->foreign('marcaId')

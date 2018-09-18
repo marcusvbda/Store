@@ -39,19 +39,19 @@
                             <p style="margin-bottom: 0;"><strong>Cadastrado em : </strong>{{date_format(date_create($produto->dataCadastro), 'd/m/Y')}} as {{$produto->horaCadastro}}</p>
                           </div>
                           <div class="col-md-2">
-                            <label>Codigo de Referência <span class="text-danger" v-show="((frm.ean=='')||(frm.ean==null))">*</span></label>
+                            <label><span class="text-danger" v-show="((frm.ean=='')||(frm.ean==null))">*</span> Codigo de Referência</label>
                             <input type="" class="form form-control" v-model="frm.codRef" :required="((frm.ean=='')||(frm.ean==null))" required>
                           </div>
                           <div class="col-md-3">
-                            <label>Nome <span class="text-danger">*</span></label>
+                            <label><span class="text-danger">*</span> Nome</label>
                             <input type="" class="form form-control" v-model="frm.nome" required required >
                           </div>
                           <div class="col-md-3">
-                            <label>EAN <span class="text-danger"  v-show="((frm.codRef=='')||(frm.codRef==null))">*</span></label>
+                            <label><span class="text-danger"  v-show="((frm.codRef=='')||(frm.codRef==null))">*</span> EAN</label>
                             <input type="" class="form form-control" v-model="frm.ean" :required="((frm.codRef=='')||(frm.codRef==null))" required >
                           </div>
                           <div class="col-md-1">
-                            <label>Ativo <span class="text-danger">*</span></label>
+                            <label><span class="text-danger">*</span> Ativo</label>
                             <select class="form form-control" v-model="frm.ativo" required required >
                                 <option value="1">SIM</option>
                                 <option value="0">NÃO</option>
@@ -188,18 +188,20 @@
   <div style="display:none;" id="formUpload">
       <form v-on:submit.prevent="salvarImagem()">
         <div class="row" style="margin-bottom: 10px;">
-            <div class="col-md-6">
-                <label>Legenda <span class="text-danger">*</span></label>
-                <input type="text" class="form form-control" name="legenda" v-model="novaImagem.legenda" required>
+            <div class="col-md-12">
+                <label><span class="text-danger">*</span> Nome</label>
+                <input type="text" class="form form-control" name="nome" v-model="novaImagem.nome" required>
             </div>
-            <div class="col-md-6 text-left">
-                <label>Legenda <span class="text-danger">*</span></label>
+          </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-md-12">
+                <label><span class="text-danger">*</span> Legenda</label>
                 <input type="text" class="form form-control" name="legenda" v-model="novaImagem.legenda" required>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12 text-left">
-                <label>Imagem <span class="text-danger">*</span></label>
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-md-12">
+                <label><span class="text-danger">*</span> Imagem</label>
                 <input type="file" id="novaImagemFile" v-model="novaImagem.imagem" required>
             </div>
         </div>

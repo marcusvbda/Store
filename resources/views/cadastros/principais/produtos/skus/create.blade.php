@@ -38,19 +38,19 @@
                             <p style="margin-bottom: 0;"><strong>Cadastrado em : </strong>{{date_format(date_create($produto->dataCadastro), 'd/m/Y')}} as {{$produto->horaCadastro}}</p>
                           </div>
                           <div class="col-md-2">
-                            <label>Codigo de Referência <span class="text-danger" v-show="((frm.ean=='')||(frm.ean==null))">*</span></label>
+                            <label> <span class="text-danger" v-show="((frm.ean=='')||(frm.ean==null))">*</span> Codigo de Referência</label>
                             <input type="" class="form form-control" v-model="frm.codRef" :required="((frm.ean=='')||(frm.ean==null))">
                           </div>
                           <div class="col-md-3">
-                            <label>Nome <span class="text-danger">*</span></label>
+                            <label><span class="text-danger">*</span> Nome</label>
                             <input type="" class="form form-control" v-model="frm.nome" required>
                           </div>
                           <div class="col-md-3">
-                            <label>EAN <span class="text-danger"  v-show="((frm.codRef=='')||(frm.codRef==null))">*</span></label>
+                            <label><span class="text-danger"  v-show="((frm.codRef=='')||(frm.codRef==null))">*</span> EAN</label>
                             <input type="" class="form form-control" v-model="frm.ean" :required="((frm.codRef=='')||(frm.codRef==null))">
                           </div>
                           <div class="col-md-1">
-                            <label>Ativo <span class="text-danger">*</span></label>
+                            <label><span class="text-danger">*</span> Ativo</label>
                             <select class="form form-control" v-model="frm.ativo" required>
                                 <option value="1">SIM</option>
                                 <option value="0">NÃO</option>

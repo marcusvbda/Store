@@ -29,11 +29,11 @@
                             <input type="" class="form form-control" v-model="frm.codRef">
                           </div>
                           <div class="col-md-6">
-                            <label>Nome <span class="text-danger">*</span></label>
+                            <label><span class="text-danger">*</span> Nome</label>
                             <input type="" class="form form-control" v-model="frm.nome" required v-on:blur="exitNome()">
                           </div>
                           <div class="col-md-4">
-                            <label>TextLink <span class="text-danger">*</span></label>
+                            <label><span class="text-danger">*</span> TextLink</label>
                             <input type="" class="form form-control" v-model="frm.textLink" required onkeyup="this.value = String(this.value).trim()">
                             <small>(Utilizado para montar a Url do produto) Não utilizar acentuação</small>
                           </div>
@@ -61,7 +61,7 @@
                       </div>
                       <div class="row" style="padding-bottom: 10px;">
                           <div class="col-md-4">
-                            <label>Marca <span class="text-danger">*</span></label>
+                            <label><span class="text-danger">*</span> Marca</label>
                             <select class="form form-control selectpicker" required v-model="frm.marcaId" required data-live-search="true">
                               <option disabled>Selecione uma opção</option>
                               @foreach($marcas as $marca)
@@ -70,7 +70,7 @@
                             </select>
                           </div>
                           <div class="col-md-4">
-                            <label>Categorias <span class="text-danger">*</span></label>
+                            <label><span class="text-danger">*</span> Categorias</label>
                             <select class="form form-control selectpicker"  required v-model="frm.categoriaId" data-live-search="true" v-on:change="changeCategoria()">
                               <option disabled>Selecione uma opção</option>
                               @foreach($categorias as $categoria)
@@ -79,7 +79,7 @@
                             </select>
                           </div>
                           <div class="col-md-4">
-                            <label>Sub Categorias <span class="text-danger">*</span></label>
+                            <label><span class="text-danger">*</span> Sub Categorias</label>
                             <select class="form form-control selectpicker" data-show-subtext="true" data-live-search="true" multiple required id="selectSubCategoria" v-model="frm.subCategorias">
                                 @foreach($subCategorias as $sub)
                                   <option data-subtext="{{$sub->categoria}}" class="catOption {{$sub->categoriaId}}_subOption"  style="display: none;" value="{{$sub->id}}">{{$sub->nome}}</option>

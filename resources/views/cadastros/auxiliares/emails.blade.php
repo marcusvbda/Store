@@ -85,7 +85,35 @@
 <script>
 $('#modelo').summernote({
     height: 250,
+    callbacks: {
+                onImageUpload: function(image) {
+                    uploadImage(image[0]);
+                }
+            }
 });
+
+function uploadImage(image)
+{
+    var data = new FormData();
+    data.append("image", image);
+    $.ajax({
+        url: "{{route('cadastros.auxiliares.emails.uploadImagem')}}",
+        cache: false,
+        contentType: false,
+        processData: false,
+        data: data,
+        type: "POST",
+        success: function(response) 
+        {
+            console.log(response);
+            var image = $('<img>').attr('src', response.data);
+            $('#modelo').summernote("insertNode", image[0]);
+        },
+        error: function(data) {
+            console.log(data);
+        }
+    });
+}
 
 var dtable = new dataTableCrud({
     titulo : " de modelo email",

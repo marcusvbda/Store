@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\DefaultCrudController;
+use Illuminate\Http\Request;
 
 class EspecificacoesSkuController extends DefaultCrudController
 {
@@ -11,22 +12,25 @@ class EspecificacoesSkuController extends DefaultCrudController
     {
         $this->table        = "skuEspecificacao";
         $this->primaryKey   = "id";
-        $this->route        = "cadastros.principais.produtos.skus.especificacoes";
+        $this->route        = "cadastros.principais.produtos.sku.especificacoes";
         $this->principalView   = "cadastros.principais.produtos.skus.especificacoes.index";
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $nome = "";
-        $tipoCampo = "";
         try 
         {
+            $request = $request->all();
+            $nome = "";
+            $tipoCampo = "";
             $data  = DB::table($this->table);
-            if(isset($_GET["nome"]))
+            if(isset($request["nome"]))
             {
-                $nome = strtoupper($_GET["nome"]);
+                $nome = strtoupper($request["nome"]);
                 if($nome!="")
+                {
                     $data = $data->where("nome","like","%{$nome}%");
+                }
             }
             $data = $data->get();
             

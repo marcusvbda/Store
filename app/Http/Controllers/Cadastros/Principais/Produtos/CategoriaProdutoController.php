@@ -17,15 +17,16 @@ class CategoriaProdutoController extends DefaultCrudController
         $this->principalView   = "cadastros.principais.produtos.categorias.index";
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $nome = "";
         try 
         {
+            $request = $request->all();
+            $nome = "";
             $data  = DB::table($this->table);
-            if(isset($_GET["nome"]))
+            if(isset($request["nome"]))
             {
-                $nome = strtoupper($_GET["nome"]);
+                $nome = strtoupper($request["nome"]);
                 if($nome!="")
                     $data = $data->where("nome","like","%{$nome}%");
             }
@@ -49,26 +50,27 @@ class CategoriaProdutoController extends DefaultCrudController
         }
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        $_POST["nome"] = strtoupper($_POST["nome"]);
-        return parent::store();
+        $request["nome"] = strtoupper($request["nome"]);
+        return parent::store($request);
     }
 
-    public function put()
+    public function put(Request $request)
     {
-        $_POST["nome"] = strtoupper($_POST["nome"]);
-        return parent::put();
+        $request["nome"] = strtoupper($request["nome"]);
+        return parent::put($request);
     }
 
-    public function substore()
+    public function substore(Request $request)
     {
         try 
         {
-            unset($_POST["_token"],$_POST["_method"]);
-            $_POST["id"] = uniqid();    
-            $_POST["nome"] = strtoupper($_POST["nome"]);      
-            $data = DB::table("produtoSubCategoria")->insert($_POST);
+            $request = $request->all();
+            unset($request["_token"],$request["_method"]);
+            $request["id"] = uniqid();    
+            $request["nome"] = strtoupper($request["nome"]);      
+            $data = DB::table("produtoSubCategoria")->insert($request);
             return redirect()->route($this->route);
         } 
         catch (\Exception $e) 
@@ -92,14 +94,15 @@ class CategoriaProdutoController extends DefaultCrudController
         }
     }
 
-    public function putsub()
+    public function putsub(Request $request)
     { 
         try 
         {
-            unset($_POST["_token"],$_POST["_method"]);
-            $_POST["nome"] = strtoupper($_POST["nome"]);
-            $data = DB::table("produtoSubCategoria")->where("id","=",$_POST["id"]);
-            $data = $data->update($_POST);
+            $request = $request->all();
+            unset($request["_token"],$request["_method"]);
+            $request["nome"] = strtoupper($request["nome"]);
+            $data = DB::table("produtoSubCategoria")->where("id","=",$request["id"]);
+            $data = $data->update($request);
             return redirect()->route($this->route);
         } 
         catch (\Exception $e) 
@@ -109,11 +112,12 @@ class CategoriaProdutoController extends DefaultCrudController
         }
     }
 
-    public function getsub()
+    public function getsub(Request $request)
     { 
         try 
         {
-            $data = DB::table("produtoSubCategoria")->where("id","=",$_GET["id"]);
+            $request = $request->all();
+            $data = DB::table("produtoSubCategoria")->where("id","=",$request["id"]);
             $data = $data->first();
 
             return response()->json(["code"=>202,"success"=>true,"data"=>$data]);

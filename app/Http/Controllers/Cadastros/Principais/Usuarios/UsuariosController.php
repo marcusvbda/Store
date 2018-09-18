@@ -10,7 +10,7 @@ use App\Utils\excel;
 use App\User;
 use App\Context;
 
-class UsuariosController extends Controller
+class UsuariosController extends DefaultCrudController
 {
     public function __construct()
     {
@@ -23,36 +23,37 @@ class UsuariosController extends Controller
         $this->showView       = "cadastros.principais.usuarios.show";
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try 
         {
+            $request = $request->all();
             $nome = "";
             $email = "";
             $dtNascimentoDe = "";
             $dtNascimentoAte = "";
             $data = DB::table("usuarios");
             
-            if(!empty($_GET["nome"]))
+            if(!empty($request["nome"]))
             {
-                $nome = $_GET["nome"];
+                $nome = $request["nome"];
                 $data = $data->where("usuarios.nome","like","%{$nome}%");                
             }
-            if(!empty($_GET["email"]))
+            if(!empty($request["email"]))
             {
-                $email = $_GET["email"];
+                $email = $request["email"];
                 $data = $data->where("usuarios.email","like","%{$email}%");                
             }
 
-            if(!empty($_GET["dtNascimentoDe"]))
+            if(!empty($request["dtNascimentoDe"]))
             {
-                $dtNascimentoDe = $_GET["dtNascimentoDe"];
+                $dtNascimentoDe = $request["dtNascimentoDe"];
                 $data = $data->where("dtNascimento",">=",$dtNascimentoDe);                
             }
 
-            if(!empty($_GET["dtNascimentoAte"]))
+            if(!empty($request["dtNascimentoAte"]))
             {
-                $dtNascimentoAte = $_GET["dtNascimentoAte"];
+                $dtNascimentoAte = $request["dtNascimentoAte"];
                 $data = $data->where("usuarios.dtNascimento","<=",$dtNascimentoAte);                
             }
 
@@ -114,21 +115,21 @@ class UsuariosController extends Controller
         }
     }
 
-    public function store()
+    public function store(Request $request)
     {
         try 
         {
-            
-            unset($_POST["_token"],$_POST["_method"],$_POST[$this->primaryKey]);
+            $request = $request->all();
+            unset($request["_token"],$request["_method"],$request[$this->primaryKey]);
             $userId = uniqid();           
-            $_POST["id"]       = $userId;       
-            $_POST["senha"]    = md5($_POST["senha"]);    
-            $polos = explode(",",$_POST["tenantId"]);
-            unset($_POST["tenantId"]);   
-            DB::table($this->table)->insert($_POST);
-            foreach($polos as $polo)
+            $request["id"]       = $userId;       
+            $request["senha"]    = md5($request["senha"]);    
+            $tenants = explode(",",$request["tenantId"]);
+            unset($request["tenantId"]); 
+            DB::table($this->table)->insert($request);
+            foreach($tenants as $tenant)
             {
-                DB::table("tenantsUsuarios")->insert(["usuarioId"=>$userId,"tenantId"=>$polo]);
+                DB::table("tenantsUsuarios")->insert(["usuarioId"=>$userId,"tenantId"=>$tenant]);
             }
             return redirect()->route($this->showView,["id"=>$userId]);
         } 

@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Cadastros\Auxiliares;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use App\Http\Controllers\DefaultCrudController;
 
 class EmailsController extends DefaultCrudController
@@ -15,48 +16,23 @@ class EmailsController extends DefaultCrudController
         $this->principalView   = "cadastros.auxiliares.emails";
     }
 
-    public function get()
-    {
-        try 
-        {
-            $data = DB::table($this->table)->where("id","=",$_GET["id"])->first();
-            return response()->json(["code"=>202,"success"=>true, "data" => $data]);
-        } 
-        catch (\Exception $e) 
-        {
-            return response()->json(["code"=>202,"success"=>false,"message" => $e->getMessage()]);
-        }
-    }
-
-    public function store()
-    {   
-        unset($_POST[$this->primaryKey]);
-        unset($_POST["files"]);
-        return parent::store();
-    }
-
-    public function put()
-    {  
-        unset($_POST["files"]);
-        return parent::put();
-    }
-
-    public function index()
+    public function index(Request $request)
     {
         $nome = "";
         $assunto = "";
         try 
         {
+            $request = $request->all();
             $data  = DB::table($this->table)->where("tenantId","=",Auth::user()->tenantId);
-            if(isset($_GET["nome"]))
+            if(isset($request["nome"]))
             {
-                $nome = strtoupper($_GET["nome"]);
+                $nome = strtoupper($request["nome"]);
                 if($nome!="")
                     $data = $data->where("modeloEmail.nome","like","%{$nome}%");
             }
-            if(isset($_GET["assunto"]))
+            if(isset($request["assunto"]))
             {
-                $assunto = strtoupper($_GET["assunto"]);
+                $assunto = strtoupper($request["assunto"]);
                 if($assunto!="")
                     $data = $data->where("modeloEmail.assunto","like","%{$assunto}%");
             }
@@ -71,5 +47,6 @@ class EmailsController extends DefaultCrudController
         }
     }
 
+    
 
 }

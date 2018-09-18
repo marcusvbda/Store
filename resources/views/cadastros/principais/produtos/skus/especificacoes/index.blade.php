@@ -65,7 +65,6 @@
             <div class="col-md-4">
                 <label><span class="text-danger">*</span> Tipo</label>
                 <select class="form form-control" name="tipoCampo" id="tipoCampo" required v-model="tipoCampo"> 
-                    <option disabled selected>Selecione uma opção</option>
                     <option value="TEXT">Texto</option>
                     <option value="NUMBER">Numérico</option>
                     <option value="SELECT">Seleção</option>

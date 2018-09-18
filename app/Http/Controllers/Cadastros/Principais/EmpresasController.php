@@ -23,34 +23,35 @@ class EmpresasController extends DefaultCrudController
         $this->editView       = "cadastros.principais.empresas.edit";
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try 
         {
+            $request = $request->all();
             $principal = "";
             $cnpj = "";
             $razao = "";
             $nome = "";
             $principal = -1;
             $data = DB::table($this->table);
-            if(!empty($_GET["cnpj"]))
+            if(!empty($request["cnpj"]))
             {
-                $cnpj = $_GET["cnpj"];
+                $cnpj = $request["cnpj"];
                 $data = $data->where("cnpj","like","%{$cnpj}%");                
             }
-            if(!empty($_GET["nome"]))
+            if(!empty($request["nome"]))
             {
-                $nome = $_GET["nome"];
+                $nome = $request["nome"];
                 $data = $data->where("nome","like","%{$nome}%");                
             }
-            if(!empty($_GET["razao"]))
+            if(!empty($request["razao"]))
             {
-                $razao = $_GET["razao"];
+                $razao = $request["razao"];
                 $data = $data->where("razao","like","%{$razao}%");                
             }
-            if(isset($_GET["principal"]))
+            if(isset($request["principal"]))
             {
-                $principal = $_GET["principal"];
+                $principal = $request["principal"];
                 if($principal!=-1)
                 {
                     $data = $data->where("principal","=",$principal);   
@@ -83,40 +84,26 @@ class EmpresasController extends DefaultCrudController
         return view($this->showView,compact('tenant'));
     }
 
-    public function store()
+    public function store(Request $request)
     { 
         try 
         {
-            unset($_POST["_token"],$_POST["_method"]);
-            $_POST["id"] = uniqid();
+            $request = $request->all();
+            DB::beginTransaction();
+            unset($request["_token"],$request["_method"]);
+            $request["id"] = uniqid();
             if(Schema::hasColumn($this->table,"tenantId"))
             {
-                $_POST["tenantId"] = Auth::user()->tenantId;
+                $request["tenantId"] = Auth::user()->tenantId;
             }           
-            $data = DB::table($this->table)->insert($_POST);
-            DB::table('TenantParametros')->insert(
-            [
-                "parametroId"  =>  "casasDecimais",
-                "valor"        =>  "2",
-                "tenantId"     =>  $_POST["id"] 
-            ]);
-            DB::table('TenantParametros')->insert(
-            [
-                "parametroId"  =>  "distribuirFollowsAutomaticamente",
-                "valor"        =>  "1",
-                "tenantId"     =>  $_POST["id"] 
-            ]);
-            DB::table('TenantParametros')->insert(
-            [
-                "parametroId"  =>  "diasParaAgendamentoPadrao",
-                "valor"        =>  "2",
-                "tenantId"     =>  $_POST["id"] 
-            ]);
+            $data = DB::table($this->table)->insert($request);
+            DB::commit();
             return redirect()->route($this->route);
         } 
         catch (\Exception $e) 
         {
             $message = $e->getMessage();
+            DB::rollBack();
             return view("errors.500",compact("message"));
         }
     }

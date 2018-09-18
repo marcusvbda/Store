@@ -96,17 +96,18 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    public function logar()
+    public function logar(Request $request)
     {
-        $manter_logado =  $_POST["manter_logado"];
-        $usuario = User::where( "email","=",$_POST["email"] )
-            ->where("senha","=", md5($_POST["senha"]) )
+        $request = $request->all();
+        $manter_logado =  $request["manter_logado"];
+        $usuario = User::where( "email","=",$request["email"] )
+            ->where("senha","=", md5($request["senha"]) )
             ->get();
         
         if(Count($usuario)>0)
         {
             Auth::loginUsingId($usuario[0]->id, $manter_logado);   
-            User::where("id","=",$usuario[0]->id)->update(["tenantId"=>$_POST["tenantId"]]);            
+            User::where("id","=",$usuario[0]->id)->update(["tenantId"=>$request["tenantId"]]);            
             return response()->json(["code"=>202,"success"=>true]);            
         }
         else
@@ -115,10 +116,11 @@ class LoginController extends Controller
         }
     }
 
-    public function getTenants()
+    public function getTenants(Request $request)
     {
-        $usuario = User::where( "email","=",$_POST["email"] )
-            ->where("senha","=", md5($_POST["senha"]) );
+        $request = $request->all();
+        $usuario = User::where( "email","=",$request["email"] )
+            ->where("senha","=", md5($request["senha"]) );
         if($usuario->count()>0)
         {
             $usuario = $usuario->first();

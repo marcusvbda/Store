@@ -19,15 +19,16 @@ class GruposAcessoController extends DefaultCrudController
         $this->principalView   = "cadastros.principais.usuarios.gruposAcesso";
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $nome = "";
         try 
         {
+            $request = $request->all();
+            $nome = "";
             $data  = DB::table($this->table);
-            if(isset($_GET["nome"]))
+            if(isset($request["nome"]))
             {
-                $nome = strtoupper($_GET["nome"]);
+                $nome = strtoupper($request["nome"]);
                 if($nome!="")
                     $data = $data->where("nome","like","%{$nome}%");
             }
@@ -42,11 +43,12 @@ class GruposAcessoController extends DefaultCrudController
         }
     }
 
-    public function get()
+    public function get(Request $request)
     { 
         try 
         {
-            $primaryKey = $_GET[$this->primaryKey];
+            $request = $request->all();
+            $primaryKey = $request[$this->primaryKey];
             $data = [];
             $grupoAcesso = DB::table("gruposAcesso")->find($primaryKey);
             foreach(Permissoes::get() as $permissao)
@@ -66,56 +68,52 @@ class GruposAcessoController extends DefaultCrudController
         }
     }
 
-    public function store()
+    public function store(Request $request)
     {
         try 
         {
-            DB::beginTransaction();
-            unset($_POST["_token"],$_POST["_method"],$_POST[$this->primaryKey]);
+            $request = $request->all();
+            unset($request["_token"],$request["_method"],$request[$this->primaryKey]);
             $grupoAcessoId = uniqid();
-            DB::table("gruposAcesso")->insert(["id"=>$grupoAcessoId,"nome"=>$_POST["nome"]]);
+            DB::table("gruposAcesso")->insert(["id"=>$grupoAcessoId,"nome"=>$request["nome"]]);
             foreach( Permissoes::get() as $permissao)
             {
-                if(isset($_POST[$permissao->nome]))
+                if(isset($request[$permissao->nome]))
                 {
                     DB::table("grupoAcessoPermissoes")->insert(["permissaoId"=>$permissao->id,"grupoAcessoId"=>$grupoAcessoId]);
                 }
             }
-            DB::commit();
             return redirect()->route($this->route);
         } 
         catch (\Exception $e) 
         {
             $message = $e->getMessage();
-            DB::rollBack();
             return view("errors.500",compact("message"));
         }
     }
 
 
-    public function put()
+    public function put(Request $request)
     { 
         try 
         {
-            DB::beginTransaction();
-            unset($_POST["_token"],$_POST["_method"]);
-            $grupoAcesso = DB::table("gruposAcesso")->find($_POST[$this->primaryKey]);
-            DB::table("gruposAcesso")->where("id","=",$_POST[$this->primaryKey])->update(["nome" => $_POST["nome"]]);
+            $request = $request->all();
+            unset($request["_token"],$request["_method"]);
+            $grupoAcesso = DB::table("gruposAcesso")->find($request[$this->primaryKey]);
+            DB::table("gruposAcesso")->where("id","=",$request[$this->primaryKey])->update(["nome" => $request["nome"]]);
             DB::table("grupoAcessoPermissoes")->where("grupoAcessoId","=",$grupoAcesso->id)->delete();
             foreach( Permissoes::get() as $permissao)
             {
-                if(isset($_POST[$permissao->nome]))
+                if(isset($request[$permissao->nome]))
                 {
                     DB::table("grupoAcessoPermissoes")->insert(["permissaoId" => $permissao->id , "grupoAcessoId" => $grupoAcesso->id]);
                 }
             }
-            DB::commit();
             return redirect()->route($this->route);            
         } 
         catch (\Exception $e) 
         {
             $message = $e->getMessage();
-            DB::rollBack();
             return view("errors.500",compact("message"));
         }
     }

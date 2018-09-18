@@ -106,11 +106,12 @@ class ParametrosController extends Controller
             return null;
     }
 
-    public function setSession()
+    public function setSession(Request $request)
     {
         try 
         {
-            session([ $_POST["nome"] => $_POST["valor"] ]);
+            $request = $request->all();
+            session([ $request["nome"] => $request["valor"] ]);
             return response()->json(["code"=>202,"success"=>true]);
         } 
         catch (\Exception $e) 

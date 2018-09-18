@@ -22,7 +22,7 @@
                     <thead>
                         <tr>
                             <th>NOME</th>
-                            <th style="width:1%"></th>
+                            <th style="width:1%" class="no-sort"></th>
                         </tr>
                     </thead>
                     <form onsubmit="loadingElement($('#btnFiltrar'))">

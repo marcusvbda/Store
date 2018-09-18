@@ -75,28 +75,12 @@
             </div>
             <div class="row">
               <div class="col-md-3" style="margin-bottom:15px;">
-                  <label><span class="text-danger">*</span> Polo</label>
+                  <label><span class="text-danger">*</span> Empresa</label>
                   <select class="form form-control selectpicker" multiple required v-model="frm.tenantId" parsley-trigger="change"
                     data-parsley-required-message="Este é um campo obrigatório">
                       @foreach($tenants as $tenant)
                         <option value="{{$tenant->id}}">{{$tenant->nome}}</option>
                       @endforeach
-                  </select>
-              </div>
-              <div class="col-md-3" style="margin-bottom:15px;">
-                  <label><span class="text-danger">*</span> Operador Follow</label>
-                  <select class="form form-control"  required v-model="frm.operadorFollow" parsley-trigger="change"
-                    data-parsley-required-message="Este é um campo obrigatório">
-                        <option value="1">Sim</option>
-                        <option value="0">Não</option>
-                  </select>
-              </div>
-              <div class="col-md-3" style="margin-bottom:15px;">
-                  <label><span class="text-danger">*</span> Captador</label>
-                  <select class="form form-control"  required v-model="frm.captador" parsley-trigger="change"
-                    data-parsley-required-message="Este é um campo obrigatório">
-                        <option value="1">Sim</option>
-                        <option value="0">Não</option>
                   </select>
               </div>
               <div class="col-md-3" style="margin-bottom:15px;">
@@ -142,8 +126,6 @@ el: '#app',
           senha : "",
           dtNascimento : "",
           tenantId : "",
-          operadorFollow : 1,
-          captador : 0,
           mudarSenha : 0
       }
   },

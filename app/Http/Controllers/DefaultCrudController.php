@@ -12,12 +12,78 @@ class DefaultCrudController extends Controller
     public $route           = "";
     public $principalView   = "";
 
-    public function index()
+    public function index(Request $request)
     {
         try 
         {
+            $request = $request->all();
             $data  = DB::table($this->table)->get();
             return view($this->principalView,compact('data'));
+        } 
+        catch (\Exception $e) 
+        {
+            $message = $e->getMessage();
+            return view("errors.500",compact("message"));
+        }
+    }
+
+    public function get(Request $request)
+    { 
+        try 
+        {
+            $request = $request->all();
+            $primaryKey = $request[$this->primaryKey];
+            $data = DB::table($this->table)->where($this->primaryKey,"=",$primaryKey);
+            if(Schema::hasColumn($this->table,"tenantId"))
+            {
+                $data = $data->where("tenantId", "=", Auth::user()->tenantId);
+            }  
+            $data = $data->first();
+
+            return response()->json(["code"=>202,"success"=>true,"data"=>$data]);
+        } 
+        catch (\Exception $e) 
+        {
+            return response()->json(["code"=>202,"success"=>false,"message" => $e->getMessage()]);
+        }
+    }
+
+    public function store(Request $request)
+    { 
+        try 
+        {
+            $request = $request->all();
+            unset($request["_token"],$request["_method"],$request["files"]);
+            $request["id"] = uniqid();
+            if(Schema::hasColumn($this->table,"tenantId"))
+            {
+                $request["tenantId"] = Auth::user()->tenantId;
+            }     
+            $data = DB::table($this->table)->insert($request);
+            return redirect()->route($this->route);
+        } 
+        catch (\Exception $e) 
+        {
+            $message = $e->getMessage();
+            return view("errors.500",compact("message"));
+        }
+    }
+
+    public function put(Request $request)
+    { 
+        try 
+        {
+            $request = $request->all();
+            unset($request["_token"],$request["_method"],$request["files"]);
+            $data = DB::table($this->table)->where($this->primaryKey,"=",$request[$this->primaryKey]);
+            if(Schema::hasColumn($this->table,"tenantId"))
+            {
+                $data = $data->where("tenantId", "=", Auth::user()->tenantId);
+            }  
+
+            $data = $data->update($request);
+
+            return redirect()->route($this->route);
         } 
         catch (\Exception $e) 
         {
@@ -92,67 +158,6 @@ class DefaultCrudController extends Controller
         }
     }
 
-    public function get()
-    { 
-        try 
-        {
-            $primaryKey = $_GET[$this->primaryKey];
-            $data = DB::table($this->table)->where($this->primaryKey,"=",$primaryKey);
-            if(Schema::hasColumn($this->table,"tenantId"))
-            {
-                $data = $data->where("tenantId", "=", Auth::user()->tenantId);
-            }  
-            $data = $data->first();
-
-            return response()->json(["code"=>202,"success"=>true,"data"=>$data]);
-        } 
-        catch (\Exception $e) 
-        {
-            return response()->json(["code"=>202,"success"=>false,"message" => $e->getMessage()]);
-        }
-    }
-
-    public function store()
-    { 
-        try 
-        {
-            unset($_POST["_token"],$_POST["_method"]);
-            $_POST["id"] = uniqid();
-            if(Schema::hasColumn($this->table,"tenantId"))
-            {
-                $_POST["tenantId"] = Auth::user()->tenantId;
-            }           
-            $data = DB::table($this->table)->insert($_POST);
-            return redirect()->route($this->route);
-        } 
-        catch (\Exception $e) 
-        {
-            $message = $e->getMessage();
-            return view("errors.500",compact("message"));
-        }
-    }
-
-    public function put()
-    { 
-        try 
-        {
-            unset($_POST["_token"],$_POST["_method"]);
-            $data = DB::table($this->table)->where($this->primaryKey,"=",$_POST[$this->primaryKey]);
-            if(Schema::hasColumn($this->table,"tenantId"))
-            {
-                $data = $data->where("tenantId", "=", Auth::user()->tenantId);
-            }  
-
-            $data = $data->update($_POST);
-
-            return redirect()->route($this->route);
-        } 
-        catch (\Exception $e) 
-        {
-            $message = $e->getMessage();
-            return view("errors.500",compact("message"));
-        }
-    }
 
     public function delete(Request $request)
     { 

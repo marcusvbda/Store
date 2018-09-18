@@ -11,7 +11,8 @@ use App\User;
 use App\Context;
 use App\Utils\Helper;
 
-class ProdutosController extends Controller
+
+class ProdutosController extends DefaultCrudController
 {
     public function __construct()
     {
@@ -29,24 +30,25 @@ class ProdutosController extends Controller
         $this->createSkuView  = "cadastros.principais.produtos.skus.create";
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try 
         {
+            $request = $request->all();
             $nome = "";
             $marcaId = "";
             $data = DB::table("produtos")
             ->select("produtos.*","produtoMarca.nome as marca")
             ->join("produtoMarca","produtoMarca.id","=","produtos.marcaId");
             
-            if(!empty($_GET["nome"]))
+            if(!empty($request["nome"]))
             {
-                $nome = $_GET["nome"];
+                $nome = $request["nome"];
                 $data = $data->where("produtos.nome","like","%{$nome}%");                
             }
-            if(!empty($_GET["marcaId"]))
+            if(!empty($request["marcaId"]))
             {
-                $marcaId = $_GET["marcaId"];
+                $marcaId = $request["marcaId"];
                 $data = $data->where("produtos.marcaId","=","{$marcaId}");                
             }
             $data = $data->get();
@@ -152,41 +154,42 @@ class ProdutosController extends Controller
     }
 
 
-    public function skuStore($produtoId)
+    public function skuStore($produtoId,Request $request)
     {
         try 
         {
+            $request = $request->all();
             date_default_timezone_set(session('timezone'));
             DB::beginTransaction();
             $sugestoes   =  [];
             $semelhantes =  [];
             $acessorios  =  [];
-            if(isset($_POST["sugestoes"]))
-                $sugestoes   =  array_map('trim',explode(",", $_POST["sugestoes"]));
-            if(isset($_POST["semelhantes"]))
-                $semelhantes =  array_map('trim',explode(",", $_POST["semelhantes"]));
-            if(isset($_POST["acessorios"]))
-                $acessorios  =  array_map('trim',explode(",", $_POST["acessorios"]));
-            unset($_POST["_token"],$_POST["_method"],$_POST["sugestoes"],$_POST["semelhantes"],$_POST["acessorios"]);
-            $_POST["id"] = uniqid();
-            $_POST["dataCadastro"] = date('Y-m-d');
-            $_POST["horaCadastro"] = date("H:i:s");
-            $data = DB::table("skus")->insert($_POST);
+            if(isset($request["sugestoes"]))
+                $sugestoes   =  array_map('trim',explode(",", $request["sugestoes"]));
+            if(isset($request["semelhantes"]))
+                $semelhantes =  array_map('trim',explode(",", $request["semelhantes"]));
+            if(isset($request["acessorios"]))
+                $acessorios  =  array_map('trim',explode(",", $request["acessorios"]));
+            unset($request["_token"],$request["_method"],$request["sugestoes"],$request["semelhantes"],$request["acessorios"]);
+            $request["id"] = uniqid();
+            $request["dataCadastro"] = date('Y-m-d');
+            $request["horaCadastro"] = date("H:i:s");
+            $data = DB::table("skus")->insert($request);
 
             foreach($semelhantes as $semelhante)
             {
-                DB::table("skuSemelhantes")->insert(["semelhanteId"=>$semelhante,"skuId"=>$_POST["id"] ]);
+                DB::table("skuSemelhantes")->insert(["semelhanteId"=>$semelhante,"skuId"=>$request["id"] ]);
             }
             foreach($acessorios as $acessorio)
             {
-                DB::table("skuAcessorios")->insert(["acessorioId"=>$acessorio,"skuId"=>$_POST["id"] ]);
+                DB::table("skuAcessorios")->insert(["acessorioId"=>$acessorio,"skuId"=>$request["id"] ]);
             }
             foreach($sugestoes as $sugestao)
             {
-                DB::table("skuSugestao")->insert(["sugestaoId"=>$sugestao,"skuId"=>$_POST["id"] ]);
+                DB::table("skuSugestao")->insert(["sugestaoId"=>$sugestao,"skuId"=>$request["id"] ]);
             }
             DB::commit();
-            return redirect()->route($this->routeShowSku,["produtoId"=>$_POST["produtoId"],"skuId"=>$_POST["id"]  ]);
+            return redirect()->route($this->routeShowSku,["produtoId"=>$request["produtoId"],"skuId"=>$request["id"]  ]);
         } 
         catch (\Exception $e) 
         {
@@ -194,24 +197,24 @@ class ProdutosController extends Controller
             DB::rollBack();
             return view("errors.500",compact("message"));
         }
-        dd($_POST);
     }
 
-    public function store()
+    public function store(Request $request)
     {
         try 
         {
+            $request = $request->all();
             date_default_timezone_set(session('timezone'));
             DB::beginTransaction();
-            $subCategorias = array_map('trim',explode(",",$_POST["subCategorias"] ));
-            unset($_POST["_token"],$_POST["_method"],$_POST["especificacoes"],$_POST["subCategorias"]);
-            $_POST["dataCadastro"] = date('Y-m-d');
-            $_POST["horaCadastro"] = date("H:i:s");
-            $_POST["id"] = uniqid();        
-            $data = DB::table($this->table)->insert($_POST);
+            $subCategorias = array_map('trim',explode(",",$request["subCategorias"] ));
+            unset($request["_token"],$request["_method"],$request["especificacoes"],$request["subCategorias"]);
+            $request["dataCadastro"] = date('Y-m-d');
+            $request["horaCadastro"] = date("H:i:s");
+            $request["id"] = uniqid();        
+            $data = DB::table($this->table)->insert($request);
             foreach($subCategorias as $sub)
             {
-                DB::table("produtoProdutoSubCategoria")->insert(["produtoId"=>$_POST["id"],"produtoSubCategoriaId"=>$sub ]);
+                DB::table("produtoProdutoSubCategoria")->insert(["produtoId"=>$request["id"],"produtoSubCategoriaId"=>$sub ]);
             }
             DB::commit();
             return redirect()->route($this->route);
@@ -224,21 +227,22 @@ class ProdutosController extends Controller
         }
     }
 
-    public function put()
+    public function put(Request $request)
     {
         try 
         {
+            $request = $request->all();
             DB::beginTransaction();
-            $subCategorias = array_map('trim',explode(",",$_POST["subCategorias"] ));
-            unset($_POST["_token"],$_POST["_method"],$_POST["especificacoes"],$_POST["subCategorias"]);
-            $data = DB::table($this->table)->where("id","=",$_POST["id"])->update($_POST);
-            DB::table("produtoProdutoSubCategoria")->where("produtoId","=",$_POST["id"])->delete();
+            $subCategorias = array_map('trim',explode(",",$request["subCategorias"] ));
+            unset($request["_token"],$request["_method"],$request["especificacoes"],$request["subCategorias"]);
+            $data = DB::table($this->table)->where("id","=",$request["id"])->update($request);
+            DB::table("produtoProdutoSubCategoria")->where("produtoId","=",$request["id"])->delete();
             foreach($subCategorias as $sub)
             {
-                DB::table("produtoProdutoSubCategoria")->insert(["produtoId"=>$_POST["id"],"produtoSubCategoriaId"=>$sub ]);
+                DB::table("produtoProdutoSubCategoria")->insert(["produtoId"=>$request["id"],"produtoSubCategoriaId"=>$sub ]);
             }
             DB::commit();
-            return redirect()->route($this->showRoute,["id"=>$_POST["id"]]);
+            return redirect()->route($this->showRoute,["id"=>$request["id"]]);
         } 
         catch (\Exception $e) 
         {

@@ -43,7 +43,7 @@
                 </div>
                 <div class="row">
                   <div class="col-md-4" style="margin-bottom:15px;">
-                      <label><span class="text-danger">*</span> Polo</label>
+                      <label><span class="text-danger">*</span> Empresa</label>
                       <select class="form form-control selectpicker" multiple required parsley-trigger="change" disabled readonly
                         data-parsley-required-message="Este é um campo obrigatório">
                           @foreach($tenants as $tenant)
@@ -52,22 +52,6 @@
                           @endforeach
                       </select>
                   </div>
-                  <div class="col-md-4" style="margin-bottom:15px;">
-                        <label><span class="text-danger">*</span> Operador Follow</label>
-                        <select class="form form-control"  required parsley-trigger="change" disabled readonly
-                          data-parsley-required-message="Este é um campo obrigatório">
-                              <option  @if($usuario->operadorFollow) selected @endif value="1">Sim</option>
-                              <option  @if(!$usuario->operadorFollow1) selected @endif value="0">Não</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4" style="margin-bottom:15px;">
-                        <label><span class="text-danger">*</span> Captador</label>
-                        <select class="form form-control"  required parsley-trigger="change" disabled readonly
-                          data-parsley-required-message="Este é um campo obrigatório">
-                              <option @if($usuario->captador) selected @endif value="1">Sim</option>
-                              <option @if(!$usuario->captador) selected @endif value="0">Não</option>
-                        </select>
-                    </div>
                 </div>
                 @if(!$usuario->root)
                 <hr>

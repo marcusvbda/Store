@@ -11,6 +11,10 @@
 
 <div style="margin-top:15px;" id="app">
 
+  <div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      Você está em modo de  <strong>edição,</strong> após efetuar as alterações clique em salvar a abaixo.
+  </div> 
+
   <div class="panel panel-default">
       <div class="panel-heading">
           Visualização do empresa #{{$tenant->id}}

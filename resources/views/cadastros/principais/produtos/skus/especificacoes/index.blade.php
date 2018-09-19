@@ -82,6 +82,7 @@
 
 <script>
 var dtable = new dataTableCrud({
+    titulo : " de especificações",
     order : 1,
     table : "#table",
     perpage : 10,

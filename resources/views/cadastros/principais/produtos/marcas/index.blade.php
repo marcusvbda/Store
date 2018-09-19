@@ -69,6 +69,7 @@
 
 <script>
 var dtable = new dataTableCrud({
+    titulo : "de marcas",
     order : 1,
     table : "#table",
     perpage : 10,

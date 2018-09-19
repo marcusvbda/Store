@@ -8,6 +8,15 @@
 <br>
 <div id="app">
 
+  <div class="alert alert-warning alert-dismissable" v-show="!editando">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+   Você está em modo de  <strong>visualização,</strong> para fazer alterações clique em <strong>Editar</strong> abaixo.
+ </div> 
+ <div class="alert alert-info alert-dismissable" v-show="editando">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+   Você está em modo de  <strong>edição,</strong> após concluir clique em <strong>salvar</strong> abaixo.
+ </div> 
+
   <div class="panel panel-default">
       <div class="panel-heading">
           Parametros de sistema

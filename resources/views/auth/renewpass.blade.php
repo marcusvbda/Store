@@ -9,11 +9,11 @@
 
         <div class="col-md-9">
         	<div class="alert alert-success alert-dismissable">
-			    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+			    <div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 			    Sua senha foi temporariamente alterada para <strong>{{$novaSenhaTemp}}</strong>.
 			</div>
-        	<div class="alert alert-warning alert-dismissable">
-			    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        	<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+			    <div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 			    Copie esta nova senha e faça <a target="_blank" href="{{asset('admin/auth/login')}}">login</a> no sistema, antes de entrar será solicitado a mudança para uma nova senha de sua preferencia.
 			</div>
         </div>

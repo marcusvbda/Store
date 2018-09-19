@@ -20,12 +20,11 @@
               </ul>
                 <div class="tab-content ">
                     <div class="tab-pane active" id="produto" style="padding:15px;">
+                      <div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                          Você está em modo de  <strong>visualização,</strong> para poder efetuar alterações clique no botão editar abaixo.
+                      </div> 
                       <div class="row" style="padding-bottom: 10px;">
-                          <div class="col-md-2">
-                            <label>Código de referência</label>
-                            <input type="" class="form form-control" v-model="frm.codRef" readonly disabled>
-                          </div>
-                          <div class="col-md-6">
+                          <div class="col-md-8">
                             <label><span class="text-danger">*</span> Nome</label>
                             <input type="" class="form form-control" v-model="frm.nome"  readonly disabled>
                           </div>
@@ -112,7 +111,6 @@
     data:{
         frm: {
             id : "{{$produto->id}}",
-            codRef : "{{$produto->codRef}}",
             nome: "{{$produto->nome}}",
             textLink : "{{$produto->textLink}}",
             palavrasSubstitutas : "{{$produto->palavrasSubstitutas}}",

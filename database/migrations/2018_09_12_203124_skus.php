@@ -18,8 +18,8 @@ class Skus extends Migration
             $table->charset = 'utf8';
             $table->collation = 'utf8_unicode_ci';
             $table->string('id',50)->unique()->index()->primary();
-            $table->string('nome',100);
-            $table->string('ean',100)->nullable();
+            $table->string('nome',100)->unique();
+            $table->string('ean',100)->nullable()->unique();
             $table->string('codRef',100)->nullable();
             $table->string('produtoId',50)->index();
             $table->foreign('produtoId')

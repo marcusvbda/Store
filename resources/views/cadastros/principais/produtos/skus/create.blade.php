@@ -7,7 +7,8 @@
   <li class="active">Principais <span class="divider"></span></li>
   <li class="active"><a href="{{route('cadastros.principais.produtos')}}">Produtos</a><span class="divider"></span></li>
   <li class="active"><a href="{{route('cadastros.principais.produtos.show',['id'=>$produto->id])}}">{{$produto->nome}}</a><span class="divider"></span></li>
-  <li class="active"><strong>Cadastro de Sku</strong><span class="divider"></span></li>
+  <li class="active"><a href="{{route('cadastros.principais.produtos.skus',['id'=>$produto->id])}}">Skus do produto</a><span class="divider"></span></li>
+  <li class="active">Cadastro de SKU <span class="divider"></span></li>
 </ul>
 
 <div style="margin-top:15px;" id="app">
@@ -19,18 +20,15 @@
                   <li class="active">
                       <a  href="#produto" data-toggle="tab">Sku</a>
                   </li>
-                  <li>
-                      <a href="#imagens" data-toggle="tab">Imagens</a>
-                  </li>
-                  <li>
-                      <a href="#especificacoes" data-toggle="tab">Especificações</a>
-                  </li>
-                  <li>
-                      <a href="#configs" data-toggle="tab">Configurações avançadas</a>
-                  </li>
               </ul>
               <div class="tab-content ">
                   <div class="tab-pane active" id="produto" style="padding:15px;">
+
+                    <div class="alert alert-info alert-dismissable">
+                          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                          Preencha o formulário <strong>corretamente</strong> e clique em salvar a abaixo.
+                    </div> 
+
                     <form id="frm" v-on:submit.prevent="cadastrar()">
                       <div class="row" style="padding-bottom: 20px;">
                           <div class="col-md-3" style="padding-top: 20px;">
@@ -59,16 +57,10 @@
                       </div>
                       <div class="row" style="padding-bottom: 20px;">
                         <div class="col-md-12">
-                          <p style="margin:0;">
-                            <small class="text-danger">
-                              <span class="glyphicon glyphicon-circle-arrow-right"></span>
-                              Utilize gramas como unidade de massa e centimentos para unidade de tamanho.
-                            </small>
-                          </p>
                           <p style="margin: 0;">
                             <small class="text-danger">
                               <span class="glyphicon glyphicon-circle-arrow-right"></span>
-                              O peso e as medidas devem ser cadastradas considerando a ambelagem de envio.
+                              Medidas e pesos devem ser cadastradas considerando a embalagem.
                             </small>
                           </p>
                         </div>
@@ -89,10 +81,9 @@
                           <input type="number" class="form form-control" v-model="frm.comprimento" required>
                         </div>
                       </div>
-                      <hr>
                       <div class="row" style="padding-bottom: 20px;">
                         <div class="col-md-12">  
-                          <label>Produtos sugeridos</label>
+                          <label>Produtos recomendados</label>
                           <select class="form form-control selectpicker" data-show-subtext="true" data-live-search="true" multiple v-model="frm.sugestoes">
                               <option disabled>Selecione uma opção</option>
                               @foreach($outrosSkus as $row)
@@ -112,17 +103,6 @@
                           </select>
                         </div>   
                       </div> 
-                      <div class="row" style="padding-bottom: 20px;">
-                        <div class="col-md-12">  
-                          <label>Semelhantes</label>
-                          <select class="form form-control selectpicker" data-show-subtext="true" data-live-search="true" multiple v-model="frm.semelhantes">
-                              <option disabled>Selecione uma opção</option>
-                              @foreach($outrosSkus as $row)
-                                <option value="{{$row->id}}">{{$row->nome}}</option>
-                              @endforeach
-                          </select>
-                        </div>    
-                      </div>
                       <hr>
                       <div class="row">
                         <div class="col-md-12 text-right">
@@ -130,21 +110,6 @@
                         </div>
                       </div>
                     </form>
-                  </div>
-                  <div class="tab-pane" id="imagens"  style="padding:15px;">
-                        <div class="alert alert-warning alert-dismissable">
-                          Primeiro salve as informações da aba <strong>Sku</strong> para poder cadastrar imagens.
-                        </div>                  
-                  </div>
-                  <div class="tab-pane" id="especificacoes"  style="padding:15px;">
-                    <div class="alert alert-warning alert-dismissable">
-                        Primeiro salve as informações da aba <strong>Sku</strong> para poder cadastrar especificações.
-                    </div>   
-                  </div>
-                  <div class="tab-pane" id="configs"  style="padding:15px;">
-                    <div class="alert alert-warning alert-dismissable">
-                        Primeiro salve as informações da aba <strong>Sku</strong> para poder alterar as configurações avançadas.
-                    </div>   
                   </div>
                 </div>
           </div>
@@ -177,7 +142,6 @@ delimiters: ["[[","]]"],
           ativo : 1,
           sugestoes : null,
           acessorios : null,
-          semelhantes :null
       }
   },
   methods: 

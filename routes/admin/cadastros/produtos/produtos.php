@@ -7,6 +7,7 @@ Route::group(['prefix' => 'cadastros/produtos'], function ()
 	Route::put('put', 'Cadastros\Principais\Produtos\ProdutosController@put')->name("cadastros.principais.produtos.put")->middleware('can:put_produtos');
 	Route::get('{id}/show', 'Cadastros\Principais\Produtos\ProdutosController@show')->name("cadastros.principais.produtos.show")->middleware('can:get_produtos');
 	Route::get('{id}/edit', 'Cadastros\Principais\Produtos\ProdutosController@edit')->name("cadastros.principais.produtos.edit")->middleware('can:get_produtos');
+	Route::delete('{id}/delete', 'Cadastros\Principais\Produtos\ProdutosController@delete')->name("cadastros.principais.produtos.delete")->middleware('can:delete_produtos');
 	require ('routes/admin/cadastros/produtos/sku.php');
 	require ('routes/admin/cadastros/produtos/marcas.php');
     require ('routes/admin/cadastros/produtos/categorias.php');

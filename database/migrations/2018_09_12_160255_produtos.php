@@ -24,7 +24,6 @@ class Produtos extends Migration
             $table->string('textLink',100);
             $table->longtext('descricaoProduto')->nullable();
             $table->longtext('descricaoMeta')->nullable();
-            $table->string('codRef',100)->nullable();
             $table->date('dataCadastro');
             $table->time('horaCadastro');
             $table->string('categoriaId',50)->index();

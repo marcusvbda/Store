@@ -7,12 +7,16 @@
   <li class="active">Principais <span class="divider"></span></li>
   <li class="active"><a href="{{route('cadastros.principais.produtos')}}">Produtos</a><span class="divider"></span></li>
   <li class="active"><a href="{{route('cadastros.principais.produtos.show',['id'=>$produto->id])}}">{{$produto->nome}}</a><span class="divider"></span></li>
-  <li class="active">Edição de SKU<span class="divider"></span></li>
+  <li class="active"><a href="{{route('cadastros.principais.produtos.skus',['id'=>$produto->id])}}">Skus do produto</a><span class="divider"></span></li>
+  <li class="active">Edição de SKU <span class="divider"></span></li>
   <li class="active"><strong>{{$sku->nome}}</strong><span class="divider"></span></li>
 </ul>
 
 <div style="margin-top:15px;" id="app">
 
+  <div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+   Você está em modo de  <strong>edição,</strong> após efetuar as alterações clique em salvar a abaixo.
+ </div> 
   <div class="row">
       <div class="col-md-12" style="padding: 0;">
           <div id="exTab2" class="col-md-12"> 
@@ -23,15 +27,10 @@
                   <li>
                       <a href="#imagens" data-toggle="tab">Imagens</a>
                   </li>
-                  <li>
-                      <a href="#especificacoes" data-toggle="tab">Especificações</a>
-                  </li>
-                  <li>
-                      <a href="#configs" data-toggle="tab">Configurações avançadas</a>
-                  </li>
               </ul>
               <div class="tab-content ">
                   <div class="tab-pane active" id="produto" style="padding:15px;">
+                  
                     <form id="frm" v-on:submit.prevent="salvar()">
                       <div class="row" style="padding-bottom: 20px;">
                           <div class="col-md-3" style="padding-top: 20px;">
@@ -40,7 +39,7 @@
                           </div>
                           <div class="col-md-2">
                             <label><span class="text-danger" v-show="((frm.ean=='')||(frm.ean==null))">*</span> Codigo de Referência</label>
-                            <input type="" class="form form-control" v-model="frm.codRef" :required="((frm.ean=='')||(frm.ean==null))" required>
+                            <input type="" class="form form-control" v-model="frm.codRef" :required="((frm.ean=='')||(frm.ean==null))">
                           </div>
                           <div class="col-md-3">
                             <label><span class="text-danger">*</span> Nome</label>
@@ -48,7 +47,7 @@
                           </div>
                           <div class="col-md-3">
                             <label><span class="text-danger"  v-show="((frm.codRef=='')||(frm.codRef==null))">*</span> EAN</label>
-                            <input type="" class="form form-control" v-model="frm.ean" :required="((frm.codRef=='')||(frm.codRef==null))" required >
+                            <input type="" class="form form-control" v-model="frm.ean" :required="((frm.codRef=='')||(frm.codRef==null))" >
                           </div>
                           <div class="col-md-1">
                             <label><span class="text-danger">*</span> Ativo</label>
@@ -60,16 +59,10 @@
                       </div>
                       <div class="row" style="padding-bottom: 20px;">
                         <div class="col-md-12">
-                          <p style="margin:0;">
-                            <small class="text-danger">
-                              <span class="glyphicon glyphicon-circle-arrow-right"></span>
-                              Utilize gramas como unidade de massa e centimentos para unidade de tamanho.
-                            </small>
-                          </p>
                           <p style="margin: 0;">
                             <small class="text-danger">
                               <span class="glyphicon glyphicon-circle-arrow-right"></span>
-                              O peso e as medidas devem ser cadastradas considerando a ambelagem de envio.
+                              Medidas e pesos devem ser cadastradas considerando a embalagem.
                             </small>
                           </p>
                         </div>
@@ -90,10 +83,9 @@
                           <input type="number" class="form form-control" v-model="frm.comprimento" required>
                         </div>
                       </div>
-                      <hr>
                       <div class="row" style="padding-bottom: 20px;">
                         <div class="col-md-12">  
-                          <label>Produtos sugeridos</label>
+                          <label>Produtos Recomendados</label>
                           <select class="form form-control selectpicker" data-show-subtext="true" data-live-search="true" multiple v-model="frm.sugestoes">
                               <option disabled>Selecione uma opção</option>
                               @foreach($outrosSkus as $row)
@@ -113,17 +105,6 @@
                           </select>
                         </div>   
                       </div> 
-                      <div class="row" style="padding-bottom: 20px;">
-                        <div class="col-md-12">  
-                          <label>Semelhantes</label>
-                          <select class="form form-control selectpicker" data-show-subtext="true" data-live-search="true" multiple v-model="frm.semelhantes">
-                              <option disabled>Selecione uma opção</option>
-                              @foreach($outrosSkus as $row)
-                                <option value="{{$row->id}}">{{$row->nome}}</option>
-                              @endforeach
-                          </select>
-                        </div>    
-                      </div>
                       <hr>
                       <div class="row">
                         <div class="col-md-12 text-right">
@@ -138,7 +119,7 @@
                       <div class="row" style="margin-bottom: 5px;">
                         <div class="col-md-12 text-right">
                             <button class="btn btn-primary btn-sm" v-on:click="modalUploadImagem()">
-                              <span class="glyphicon glyphicon-plus"></span> Adicionar nova imagem
+                              <span class="glyphicon glyphicon-plus"></span> Adicionar imagem
                             </button>
                         </div>
                       </div>
@@ -187,17 +168,6 @@
                     </div>
 
 
-                  </div>
-                  <div class="tab-pane" id="especificacoes"  style="padding:15px;">
-                    <div class="alert alert-warning alert-dismissable">
-                        Primeiro salve as informações da aba <strong>SKU</strong> para poder cadastrar especificações.
-                    </div>   
-                  </div>
-                  <div class="tab-pane" id="configs"  style="padding:15px;">
-                    <div class="alert alert-warning alert-dismissable">
-                        Primeiro salve as informações da aba <strong>SKU</strong> para poder alterar as configurações avançadas.
-                    </div>   
-                  </div>
                 </div>
           </div>
 
@@ -218,12 +188,20 @@
               <p class="text-danger">A url de imagem será desconsiderado caso o campo seja feito o upload de uma imagem.</p>
             </div>
             <div class="col-md-4">
-                <label><span class="text-danger" v-show="((novaImagem.url=='')||(novaImagem.url==null))">*</span> Imagem</label>
-                <input type="file" id="novaImagemFile" v-model="novaImagem.imagem" :required="((novaImagem.url=='')||(novaImagem.url==null))" >
+                <label><span class="text-danger">*</span> Tipo</label>
+                <select  v-model="novaImagem.tipo" required="" class="form form-control" v-on:change="mudarTipoUpload()">
+                  <option disabled>Selecione uma opção</option>
+                  <option value="UPLOAD">Upload de imagem</option>
+                  <option value="URL">Url da imagem</option>
+                </select>
             </div>
-            <div class="col-md-8">
-                <label><span class="text-danger" v-show="((novaImagem.imagem=='')||(novaImagem.imagem==null))">*</span> Url</label>
-                <input type="text" class="form form-control" name="url" v-model="novaImagem.url" :required="((novaImagem.imagem=='')||(novaImagem.imagem==null))">
+            <div class="col-md-8" v-show="(novaImagem.tipo=='UPLOAD')">
+                <label><span class="text-danger">*</span> Imagem</label>
+                <input type="file" id="novaImagemFile" v-model="novaImagem.imagem" :required="(novaImagem.tipo=='UPLOAD')">
+            </div>
+            <div class="col-md-8" v-show="(novaImagem.tipo=='URL')">
+                <label><span class="text-danger">*</span> Url</label>
+                <input type="text" class="form form-control" name="url" v-model="novaImagem.url" :required="(novaImagem.tipo=='URL')">
             </div>
         </div>
         <hr>
@@ -245,6 +223,7 @@ delimiters: ["[[","]]"],
   data:{
       novaImagem : 
       {
+        tipo : null,
         url : null,
         legenda : null,
         imagem : null,
@@ -281,16 +260,16 @@ delimiters: ["[[","]]"],
             @foreach($acessorios as $row)
               "{{$row->id}}",
             @endforeach
-          ],
-          semelhantes : [
-            @foreach($semelhantes as $row)
-              "{{$row->id}}",
-            @endforeach
           ]
       }
   },
   methods: 
   {
+      mudarTipoUpload : function()
+      {
+          this.novaImagem.url = null;
+          this.novaImagem.imagem = null;
+      },
       excluirImagem : function(id)
       {
         var self = this;
@@ -338,15 +317,16 @@ delimiters: ["[[","]]"],
       },
       salvarImagem : function()
       {
-          if((this.novaImagem.url!=null)&&(this.novaImagem.url!=""))
-          {
-            if(!checkImagemUrl(this.novaImagem.url))
-              return toastr.error("Url de imagem inválida");
-          }
+          // if(this.novaImagem.tipo=="URL")
+          // {
+          //   if(!checkImagemUrl(this.novaImagem.url))
+          //     return toastr.error("Url de imagem inválida");
+          // }
           var self = this;
           var data = new FormData();
           data.append("imagem", $("#novaImagemFile")[0].files[0]);
           data.append("url", self.novaImagem.url);
+          data.append("tipo", self.novaImagem.tipo);
           data.append("legenda", self.novaImagem.legenda);
           data.append("principal", self.novaImagem.principal);
           $.ajax(
@@ -366,6 +346,7 @@ delimiters: ["[[","]]"],
                   self.novaImagem.imagem = null;
                   self.novaImagem.url = null;
                   self.novaImagem.legenda = null;
+                  self.novaImagem.tipo = null;
                   self.novaImagem.nome = null;
                   return $("#formUpload").dialog('close');
               },

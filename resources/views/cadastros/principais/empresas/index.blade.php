@@ -16,7 +16,7 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Cadastro de empresas
+                    Listagem de empresas
                 </div>
                 <div class="panel-body">
                     <table id="table" class="table table-striped table-bordered" style="width:100%;display:none;">
@@ -24,7 +24,7 @@
                             <tr>
                                 <th style="width:1%;" class="no-sort">
                                   @can('post_tenants')
-                                      <a onclick="loadingElement(this);openRoute('{{route('cadastros.principais.empresas.create')}}')" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span> Cadastrar</a>
+                                      <a onclick="loadingElement(this);openRoute('{{route('cadastros.principais.empresas.create')}}')" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span> Cadastrar empresa</a>
                                   @endcan
                                 </th>
                                 <th style="width:15%">CNPJ</th>
@@ -37,7 +37,7 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th style="width:15%">
+                                <th style="width:15%" class="text-center">
                                     <input type="text" class="form form-control input-sm" style="width:100%" name="cnpj"  value="{{$cnpj}}" >
                                 </th>
                                 <th>

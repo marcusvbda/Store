@@ -116,7 +116,7 @@ function uploadImage(image)
 }
 
 var dtable = new dataTableCrud({
-    titulo : " de modelo email",
+    titulo : "de modelo de email",
     order : 1,
     table : "#table",
     perpage : 10,

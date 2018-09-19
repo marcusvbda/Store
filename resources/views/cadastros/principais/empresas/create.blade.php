@@ -11,6 +11,10 @@
 
 <div style="margin-top:15px;" id="app">
 
+  <div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        Preencha o formulário <strong>corretamente</strong> e clique em salvar a abaixo.
+  </div> 
+
   <div class="panel panel-default">
       <div class="panel-heading">
           Cadastro de empresa

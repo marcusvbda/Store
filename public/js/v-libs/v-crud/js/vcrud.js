@@ -61,7 +61,7 @@ class dataTableCrud
         var tr = $(thead).find("tr");
         var td = $(this.table).find("tbody").find("tr");
 
-        var btnStore = "<a class='btnCrud btn BtnStore btn-default btn-sm'><span class='glyphicon glyphicon-plus'></span> Cadastrar</a>";
+        var btnStore = "<a class='btnCrud btn BtnStore btn-default btn-sm'><span class='glyphicon glyphicon-plus'></span> Cadastrar "+this.parametros.titulo.replace("de","")+"</a>";
         // $(this.table).before("<div class='row'><div class='col-md-12 text-right "+this.parametros.table.replace("#", "")+"__btnStore__'>"+btnStore+"</div></div>")
         $(tr).prepend("<th width='1%' class='btnStorePlace no-sort'></th>");
         $($(".btnStorePlace")[0]).html("<div class='"+this.parametros.table.replace("#", "")+"__btnStore__'>"+btnStore+"</div>");
@@ -81,7 +81,7 @@ class dataTableCrud
             '    </ul>'+ 
             '</div>';
             $(this).addClass("table_row");
-            $(this).prepend("<th width='1%' class='no-sort'>"+btnAcoes+"</th>");
+            $(this).prepend("<th width='1%' class='no-sort text-center'>"+btnAcoes+"</th>");
         });
 
         if(!this.parametros.formCrud)

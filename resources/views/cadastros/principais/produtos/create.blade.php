@@ -22,13 +22,12 @@
                 <div class="tab-content ">
                   <div class="tab-pane active" id="produto" style="padding:15px;">
 
+                      <div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                          Preencha o formulário <strong>corretamente</strong> e clique em salvar a abaixo.
+                      </div> 
 
                       <div class="row" style="padding-bottom: 10px;">
-                          <div class="col-md-2">
-                            <label>Código de referência</label>
-                            <input type="" class="form form-control" v-model="frm.codRef">
-                          </div>
-                          <div class="col-md-6">
+                          <div class="col-md-8">
                             <label><span class="text-danger">*</span> Nome</label>
                             <input type="" class="form form-control" v-model="frm.nome" required v-on:blur="exitNome()">
                           </div>
@@ -160,7 +159,6 @@ $(function()
   delimiters: ["[[","]]"],
     data:{
         frm: {
-            codRef : null,
             nome: null,
             textLink : null,
             palavrasSubstitutas : null,

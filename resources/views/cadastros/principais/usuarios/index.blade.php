@@ -52,7 +52,7 @@
                         <tr>
                             <th style="width:1%;" class="no-sort">
                               @can('post_usuarios')
-                                  <a onclick="loadingElement(this);openRoute('{{route('cadastros.principais.usuarios.create')}}')"class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span> Cadastrar</a>
+                                  <a onclick="loadingElement(this);openRoute('{{route('cadastros.principais.usuarios.create')}}')"class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span> Cadastrar usuário</a>
                               @endcan
                             </th>
                             <th style="width:20%;">Nome</th>

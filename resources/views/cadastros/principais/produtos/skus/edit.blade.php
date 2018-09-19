@@ -1,5 +1,5 @@
 @extends('templates.admin')
-@section('title', 'Edição de Sku')
+@section('title', 'Edição de SKU')
 @section('content')
 <ul class="breadcrumb" style="margin-bottom:0px;">
   <li><a href="{{route('dashboard')}}">Início</a><span class="divider"></span></li>
@@ -7,7 +7,7 @@
   <li class="active">Principais <span class="divider"></span></li>
   <li class="active"><a href="{{route('cadastros.principais.produtos')}}">Produtos</a><span class="divider"></span></li>
   <li class="active"><a href="{{route('cadastros.principais.produtos.show',['id'=>$produto->id])}}">{{$produto->nome}}</a><span class="divider"></span></li>
-  <li class="active">Edição de Sku<span class="divider"></span></li>
+  <li class="active">Edição de SKU<span class="divider"></span></li>
   <li class="active"><strong>{{$sku->nome}}</strong><span class="divider"></span></li>
 </ul>
 
@@ -18,7 +18,7 @@
           <div id="exTab2" class="col-md-12"> 
               <ul class="nav nav-tabs">
                   <li class="active">
-                      <a  href="#produto" data-toggle="tab">Sku</a>
+                      <a  href="#produto" data-toggle="tab">SKU</a>
                   </li>
                   <li>
                       <a href="#imagens" data-toggle="tab">Imagens</a>
@@ -135,7 +135,7 @@
                   <div class="tab-pane" id="imagens"  style="padding:15px;">
                       
 
-                      <div class="row">
+                      <div class="row" style="margin-bottom: 5px;">
                         <div class="col-md-12 text-right">
                             <button class="btn btn-primary btn-sm" v-on:click="modalUploadImagem()">
                               <span class="glyphicon glyphicon-plus"></span> Adicionar nova imagem
@@ -145,19 +145,41 @@
 
                       <div class="row">
                         <div class="col-md-12">
-                          <table class="table">
+                          <table class="table table-bordered">
                             <thead>
                               <tr>
-                                <th>Preview</th>
-                                <th>Legenda/Link</th>
-                                <th>Editar</th>
+                                <th class="text-center" width="1%">Preview</th>
+                                <th>Nome/Legenda</th>
+                                <th width="1%"></th>
+                                <th width="1%"></th>
                               </tr>
                             </thead>
                             <tbody>
-                              <tr>
-                                <td>teste</td>
-                                <td>teste</td>
-                                <td>teste</td>
+                              <tr  v-for="val in imagens">
+                                <td class="text-center">
+                                  <img style="height: 80px;" v-bind:src="val.url">
+                                </td>
+                                <td>
+                                  <form v-on:submit.prevent="alterarImagem(val.id)" v-bind:id="val.id">
+                                    <p><strong>Nome : </strong>[[val.nome]]</p>
+                                    <p>
+                                      <div class="form-group input-group">
+                                          <span class="input-group-addon"><span class="text-danger">*</span> Legenda</span>
+                                          <input type="text" class="form-control" placeholder="Legenda" name="legenda" required maxlength="100" :value="[[val.legenda]]">
+                                          <span class="input-group-btn">
+                                            <button type="submit" class="btn btn-default" type="button">Alterar</button>
+                                          </span>
+                                      </div>
+                                    </p>
+                                  </form>
+                                </td>
+                                <td class="text-center" style="padding-top: 45px">
+                                  <span v-show="val.principal" class="label label-success" >Principal</span>
+                                  <button v-show="!(val.principal)" class="btn btn-default btn-xs" v-on:click="setPrincipal(val.id)">Definir principal</button>
+                                </td>
+                                <td class="text-center" style="padding-top: 45px">
+                                  <button class="btn btn-danger btn-xs" v-on:click="excluirImagem(val.id)"><span class="glyphicon glyphicon-trash"></span> Excluir</button>
+                                </td>
                               </tr>
                             </tbody>
                           </table>
@@ -165,17 +187,15 @@
                     </div>
 
 
-
-
                   </div>
                   <div class="tab-pane" id="especificacoes"  style="padding:15px;">
                     <div class="alert alert-warning alert-dismissable">
-                        Primeiro salve as informações da aba <strong>Sku</strong> para poder cadastrar especificações.
+                        Primeiro salve as informações da aba <strong>SKU</strong> para poder cadastrar especificações.
                     </div>   
                   </div>
                   <div class="tab-pane" id="configs"  style="padding:15px;">
                     <div class="alert alert-warning alert-dismissable">
-                        Primeiro salve as informações da aba <strong>Sku</strong> para poder alterar as configurações avançadas.
+                        Primeiro salve as informações da aba <strong>SKU</strong> para poder alterar as configurações avançadas.
                     </div>   
                   </div>
                 </div>
@@ -185,24 +205,25 @@
   </div>
 
   
-  <div style="display:none;" id="formUpload">
+  <div style="display:none; overflow: hidden;" id="formUpload">
       <form v-on:submit.prevent="salvarImagem()">
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-12">
-                <label><span class="text-danger">*</span> Nome</label>
-                <input type="text" class="form form-control" name="nome" v-model="novaImagem.nome" required>
-            </div>
-          </div>
-        <div class="row" style="margin-bottom: 10px;">
-            <div class="col-md-12">
                 <label><span class="text-danger">*</span> Legenda</label>
-                <input type="text" class="form form-control" name="legenda" v-model="novaImagem.legenda" required>
+                <input type="text" class="form form-control" name="legenda" maxlength="100" v-model="novaImagem.legenda" required>
             </div>
         </div>
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-12">
-                <label><span class="text-danger">*</span> Imagem</label>
-                <input type="file" id="novaImagemFile" v-model="novaImagem.imagem" required>
+              <p class="text-danger">A url de imagem será desconsiderado caso o campo seja feito o upload de uma imagem.</p>
+            </div>
+            <div class="col-md-4">
+                <label><span class="text-danger" v-show="((novaImagem.url=='')||(novaImagem.url==null))">*</span> Imagem</label>
+                <input type="file" id="novaImagemFile" v-model="novaImagem.imagem" :required="((novaImagem.url=='')||(novaImagem.url==null))" >
+            </div>
+            <div class="col-md-8">
+                <label><span class="text-danger" v-show="((novaImagem.imagem=='')||(novaImagem.imagem==null))">*</span> Url</label>
+                <input type="text" class="form form-control" name="url" v-model="novaImagem.url" :required="((novaImagem.imagem=='')||(novaImagem.imagem==null))">
             </div>
         </div>
         <hr>
@@ -218,17 +239,28 @@
 
 
 <script>
-
 var app = new Vue( {
 el: '#app',
 delimiters: ["[[","]]"],
   data:{
       novaImagem : 
       {
-        nome : null,
+        url : null,
         legenda : null,
-        imagem : null
+        imagem : null,
+        principal : 0,
       },
+      imagens : [
+        @foreach($imagens as $imagem)
+          {
+            id : "{{$imagem->id}}",
+            url : "{{$imagem->url}}",
+            nome : "{{$imagem->nome}}",
+            legenda : "{{$imagem->legenda}}",
+            principal : {{$imagem->principal}},
+          },
+        @endforeach
+      ],
       frm: 
       {
           produtoId : "{{$produto->id}}",
@@ -259,16 +291,97 @@ delimiters: ["[[","]]"],
   },
   methods: 
   {
+      excluirImagem : function(id)
+      {
+        var self = this;
+        messageBox.confirm("Confirmação","Deseja mesmo excluir esta imagem ?",function()
+        {
+
+          vform.ajax("delete","{{route( 'cadastros.principais.produtos.skus.deleteImagem',['produtoId'=>$produto->id,'skuId'=>$sku->id] )}}",{id},function(response)
+          {
+            console.log(response);
+              if(!response.success)
+                return toastr.error(response.message);
+              self.imagens = response.data;
+              return toastr.success("Imagem excluida com sucesso");
+          });
+
+        });
+      },
+      alterarImagem : function(id)
+      {
+        var self = this;
+        var data = vform.getData("#"+id);
+        data["id"] = id;
+        messageBox.confirm("Confirmação","Deseja mesmo alterar esta imagem ?",function()
+        {
+          vform.ajax("put","{{route( 'cadastros.principais.produtos.skus.imagemEdit',['produtoId'=>$produto->id,'skuId'=>$sku->id] )}}",data,function(response)
+          {
+              console.log(response);
+              if(!response.success)
+                return toastr.error(response.message);
+              return toastr.success("Imagem Alterada com sucesso");
+          });
+
+        });
+      },
+      setPrincipal : function(id)
+      {   
+          var self = this;
+          vform.ajax("put","{{route( 'cadastros.principais.produtos.skus.setPrincipal',['produtoId'=>$produto->id,'skuId'=>$sku->id] )}}",{id},function(response)
+          {
+              if(!response.success)
+                return toastr.error(response.message);
+              self.imagens = response.data;
+              return toastr.success("Imagem principal alterada");
+          });
+      },
       salvarImagem : function()
       {
-        console.log(this.novaImagem);
+          if((this.novaImagem.url!=null)&&(this.novaImagem.url!=""))
+          {
+            if(!checkImagemUrl(this.novaImagem.url))
+              return toastr.error("Url de imagem inválida");
+          }
+          var self = this;
+          var data = new FormData();
+          data.append("imagem", $("#novaImagemFile")[0].files[0]);
+          data.append("url", self.novaImagem.url);
+          data.append("legenda", self.novaImagem.legenda);
+          data.append("principal", self.novaImagem.principal);
+          $.ajax(
+          {
+              url: "{{route( 'cadastros.principais.produtos.skus.uploadImagem',['produtoId'=>$produto->id,'skuId'=>$sku->id] )}}",
+              cache: false,
+              contentType: false,
+              processData: false,
+              data: data,
+              type: "POST",
+              success: function(response) 
+              {   
+                  if(!response.success)
+                    return toastr.error(response.message);
+                  toastr.success("Imagem importada com sucesso!!");
+                  self.imagens = response.data;
+                  self.novaImagem.imagem = null;
+                  self.novaImagem.url = null;
+                  self.novaImagem.legenda = null;
+                  self.novaImagem.nome = null;
+                  return $("#formUpload").dialog('close');
+              },
+              error: function(data) 
+              {
+                  toastr.error("Erro ao importar imagem");
+                  return console.log(data);
+              }
+          });
       },
       modalUploadImagem : function()
       {
           $("#formUpload").dialog(
           {
               modal: true, title: "Importação de imagens", zIndex: 10000, autoOpen: true,
-              width: "30%", resizable: false, draggable: true,
+              width: "50%", resizable: false, draggable: true,
               open: function (event, ui) 
               {
                   $(".ui-dialog-titlebar-close", ui.dialog | ui).html("X");

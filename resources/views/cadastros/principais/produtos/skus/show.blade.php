@@ -116,9 +116,46 @@
                     </div>
                   </div>
                   <div class="tab-pane" id="imagens"  style="padding:15px;">
-                        <div class="alert alert-warning alert-dismissable">
-                          Primeiro salve as informações da aba <strong>Sku</strong> para poder cadastrar imagens.
-                        </div>                  
+                        
+
+                        <div class="row">
+                          <div class="col-md-12">
+                            <table class="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th class="text-center" width="1%">Preview</th>
+                                  <th>Nome/Legenda</th>
+                                  <th width="1%"></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                @foreach($imagens as $imagem)
+                                <tr>
+                                  <td class="text-center">
+                                    <img style="height: 100px;" src="{{$imagem->url}}">
+                                  </td>
+                                  <td>
+                                    <p><strong>Nome : </strong>{{$imagem->nome}}</p>
+                                    <p>
+                                      <div class="form-group input-group">
+                                          <span class="input-group-addon">Legenda</span>
+                                          <input type="text" class="form-control" readonly disabled value="{{$imagem->legenda}}">
+                                      </div>
+                                    </p>
+                                </td>
+                                  <td class="text-center" style="padding-top: 45px">
+                                    @if($imagem->principal)
+                                      <span class="label label-success">Principal</span></button>
+                                    @endif
+                                  </td>
+                                </tr>
+                                @endforeach
+                              </tbody>
+                            </table>
+                        </div>
+                      </div>
+
+             
                   </div>
                   <div class="tab-pane" id="especificacoes"  style="padding:15px;">
                     <div class="alert alert-warning alert-dismissable">
@@ -148,6 +185,16 @@ var app = new Vue( {
 el: '#app',
 delimiters: ["[[","]]"],
   data:{
+      imagens : [
+        @foreach($imagens as $imagem)
+          {
+            url : "{{$imagem->url}}",
+            nome : "{{$imagem->nome}}",
+            legenda : "{{$imagem->legenda}}",
+            principal : {{$imagem->principal}},
+          },
+        @endforeach
+      ],
       frm: 
       {
           produtoId : "{{$produto->id}}",

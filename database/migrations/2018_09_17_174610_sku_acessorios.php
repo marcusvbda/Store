@@ -21,12 +21,12 @@ class SkuAcessorios extends Migration
             $table->foreign('skuId')
                 ->references('id')
                 ->on('skus')
-                ->onDelete('restrict');   
+                ->onDelete('cascade');   
             $table->string('acessorioId',50)->index();
             $table->foreign('acessorioId')
                 ->references('id')
                 ->on('skus')
-                ->onDelete('restrict');   
+                ->onDelete('cascade');   
             $table->primary(['acessorioId', 'skuId']);       
         });
     }

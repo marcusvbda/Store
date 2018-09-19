@@ -25,14 +25,18 @@
                                   <a onclick="loadingElement(this);openRoute('{{route('cadastros.principais.produtos.create')}}')"class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span> Cadastrar</a>
                               @endcan
                             </th>
+                            <th style="display: none;">id</th>
+                            <th style="width:5%;" class="text-center no-sort"></th>
                             <th style="width:5%;">Marca</th>
                             <th style="width:20%;">Nome</th>
-                            <th style="width:5%;">Skus</th>
+                            <th style="width:5%;">SKUs</th>
                             <th style="width:1%;" class="no-sort"></th>
                         </tr>
                           <thead>
                               <tr>
                                   <th style="width:1%;"></th>
+                                  <th style="display: none;">id</th>
+                                  <th style="width:5%;"></th>
                                   <th>
                                       <select class="form form-control input-sm"  style="width:100%" name="marcaId">
                                       	<option></option>
@@ -53,7 +57,7 @@
                       <tbody>
                       @foreach($data as $d)
                         <tr>
-                            <td class="text-center">
+                            <td class="text-center" style="padding-top: 20px;">
                               <div class="dropdown">
                                 <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" style="font-size:11px;" aria-haspopup="true" aria-expanded="true">
                                   <span class="glyphicon glyphicon-cog"></span> Ações <span class="caret"></span>
@@ -62,6 +66,11 @@
                                 <li>
                                     @can("get_produtos")
                                         <a class="BtnView" onclick="openRoute('{{route('cadastros.principais.produtos.show',['id'=>$d->id])}}')">Visualizar</a>
+                                    @endcan
+                                </li>
+                                <li>
+                                    @can("get_produtos")
+                                        <a class="BtnView" onclick="openRoute('{{route('cadastros.principais.produtos.show',['id'=>$d->id])}}')">SKUs</a>
                                     @endcan
                                 </li>
                                	<li>
@@ -78,14 +87,18 @@
                                 </ul>
                               </div>
                             </td>
-                            <td>{{$d->marca}}</td>
-                            <td>{{$d->nome}}</td>
-                            <td>
+                            <td style="display:none;">{{$d->id}}</td>
+                            <td class="text-center">
+                              <img src="{{$self->getFirstSkuImg($d->id)}}" style="height: 50px;">
+                            </td>
+                            <td style="padding-top: 20px;">{{$d->marca}}</td>
+                            <td style="padding-top: 20px;">{{$d->nome}}</td>
+                            <td style="padding-top: 20px;">
                             	<div class="row">
                             		<div class="col-md-3">
                             			<small>
                                     <a  onclick="openRoute('{{route('cadastros.principais.produtos.skus.create',['produtoId'=>$d->id])}}')" href="#">
-                                      <span class="glyphicon glyphicon-plus"></span> Novo Sku
+                                      <span class="glyphicon glyphicon-plus"></span> Novo SKU
                                     </a>
                                   </small>
                             		</div>

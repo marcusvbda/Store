@@ -434,3 +434,11 @@ var stringCor = function(str) {
   return colour;
 } 
 
+function checkImagemUrl(url)
+{
+    var http = new XMLHttpRequest();
+    http.open('HEAD', url, false);
+    http.send();
+    return http.status != 404;
+}
+

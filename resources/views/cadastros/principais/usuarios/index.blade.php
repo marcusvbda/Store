@@ -86,8 +86,8 @@
                                 <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenu1">
                                 <li>
                                     @can("get_usuarios")
-                                            <a class="BtnView" onclick="openRoute('{{route('cadastros.principais.usuarios.show',['id'=>$d->id])}}')">Visualizar</a>
-                                        @endcan
+                                        <a class="BtnView" onclick="openRoute('{{route('cadastros.principais.usuarios.show',['id'=>$d->id])}}')">Visualizar</a>
+                                    @endcan
                                     </li>
                                     @if(!$d->root)
                                       <li>

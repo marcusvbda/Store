@@ -53,7 +53,8 @@ class ProdutosController extends DefaultCrudController
             }
             $data = $data->get();
             $marcas = DB::table("produtoMarca")->get();
-            return view($this->principalView,compact('data','nome','marcaId','marcas'));
+            $self = $this;
+            return view($this->principalView,compact('self','data','nome','marcaId','marcas'));
         } 
         catch (\Exception $e) 
         {
@@ -129,7 +130,8 @@ class ProdutosController extends DefaultCrudController
             ->join("skus","skus.id","skuAcessorios.acessorioId")
             ->where("skuAcessorios.skuId","=",$skuId)
             ->select("skus.nome as nome")->get());
-        return view($this->showSkuView,compact('sku','produto','sugestoes','acessorios','semelhantes'));
+        $imagens = DB::table("skuImagens")->where("skuId","=",$skuId)->get();
+        return view($this->showSkuView,compact('sku','produto','sugestoes','acessorios','semelhantes','imagens'));
     }
 
     public function editSku($produtoId,$skuId)
@@ -150,7 +152,8 @@ class ProdutosController extends DefaultCrudController
             ->where("skuAcessorios.skuId","=",$skuId)
             ->get();
         $outrosSkus = DB::table("skus")->get();
-        return view($this->editSkuView,compact('sku','produto','outrosSkus','sugestoes','acessorios','semelhantes'));
+        $imagens = DB::table("skuImagens")->where("skuId","=",$skuId)->get();
+        return view($this->editSkuView,compact('sku','produto','outrosSkus','sugestoes','acessorios','semelhantes','imagens'));
     }
 
 
@@ -249,6 +252,132 @@ class ProdutosController extends DefaultCrudController
             $message = $e->getMessage();
             DB::rollBack();
             return view("errors.500",compact("message"));
+        }
+    }
+
+    public function setPrincipal($produtoId,$skuId,Request $request)
+    {
+        try 
+        {
+            $data = $request->all();
+            DB::table("skuImagens")->where("skuId","=",$skuId)->update(["principal"=>0]);
+            DB::table("skuImagens")->where("id","=",$data["id"])->update(["principal"=>1]);
+            $imagens = DB::table("skuImagens")->where("skuId","=",$skuId)->get();
+            return response()->json(["code"=>202,"success"=>true,"data"=>$imagens ]);
+        } 
+        catch (\Exception $e) 
+        {
+            return response()->json(["code"=>202,"success"=>false,"message" => $e->getMessage()]);
+        }
+    }
+
+    public function getFirstSkuImg($produtoId)
+    {
+        try 
+        {
+            $skus = DB::table("skus")->where("produtoId","=",$produtoId)->get();
+            if(Count($skus)<=0)
+                return asset('public/img/sem-foto.png');
+
+            $skus = explode(",",Helper::implodeEloquent("id",$skus));
+            $imagens = DB::table("skuImagens")->whereIn("skuId",$skus)->where("principal","=",1)->get();
+            if(Count($imagens)<=0)
+                return asset('public/img/sem-foto.png');
+            else
+            {
+                return $imagens[rand(0,(count($imagens)-1))]->url;
+            }
+        } 
+        catch (\Exception $e) 
+        {
+            return asset('public/img/sem-foto.png');
+        }
+    }
+
+    public function imagemEdit($produtoId,$skuId,Request $request)
+    {
+        try 
+        {
+            $data = $request->all();
+            $imagens = DB::table("skuImagens")->where("id","=",$data["id"])->update(["legenda"=>$data["legenda"]]);
+            return response()->json(["code"=>202,"success"=>true]);
+        } 
+        catch (\Exception $e) 
+        {
+            return response()->json(["code"=>202,"success"=>false,"message" => $e->getMessage()]);
+        }
+
+    }
+
+    public function deleteImagem($produtoId,$skuId,Request $request)
+    {
+        try 
+        {
+            $data = $request->all();
+            $imagem = DB::table("skuImagens")->find($data["id"]);
+            $arquivo = public_path("/upload/imgs/produtos/{$produtoId}/skus/{$skuId}/".$imagem->nome);
+            if(file_exists($arquivo))
+                unlink($arquivo);
+            if($imagem->principal)
+            {
+                $_data = DB::table("skuImagens")->where("skuId","=",$skuId);
+                if($_data->count()>0)
+                {
+                    $_data = $_data->first();
+                    DB::table("skuImagens")->where("id","=",$_data->id)->update(["principal" => 1]);
+                }
+            }
+            $imagem = DB::table("skuImagens")->where("id","=",$imagem->id)->delete();
+            $imagens = DB::table("skuImagens")->where("skuId","=",$skuId)->get();
+            return response()->json(["code"=>202,"success"=>true,"data"=>$imagens ]);
+        } 
+        catch (\Exception $e) 
+        {
+            return response()->json(["code"=>202,"success"=>false,"message" => $e->getMessage()]);
+        }
+    }
+
+    public function uploadImagem($produtoId,$skuId,Request $request)
+    {
+        try 
+        {
+            $data = $request->all();
+            $imagemId = uniqid();
+            $data["nome"]= "url_{$imagemId}";
+            if( trim($data["url"])!="" )
+            {
+                if($request->hasFile('imagem'))
+                {
+                    $image = $request->file('imagem');
+                    $name = time().'.'.$image->getClientOriginalExtension();
+                    if(!is_dir(public_path("/upload/imgs/produtos")))
+                        mkdir(public_path("/upload/imgs/produtos"),0777, true);
+                    if(!is_dir(public_path("/upload/imgs/produtos/{$produtoId}")))
+                        mkdir(public_path("/upload/imgs/produtos/{$produtoId}"),0777, true);
+                    if(!is_dir(public_path("/upload/imgs/produtos/{$produtoId}/skus")))
+                        mkdir(public_path("/upload/imgs/produtos/{$produtoId}/skus"),0777, true);
+                    if(!is_dir(public_path("/upload/imgs/produtos/{$produtoId}/skus/{$skuId}")))
+                        mkdir(public_path("/upload/imgs/produtos/{$produtoId}/skus/{$skuId}"),0777, true);
+                    $destinationPath = public_path("/upload/imgs/produtos/{$produtoId}/skus/{$skuId}");
+                    $image->move($destinationPath, $name);
+                    $data["url"] = asset("public/upload/imgs/produtos/{$produtoId}/skus/{$skuId}/{$name}");
+                    $data["nome"]=$name;
+                }
+            }
+
+            if(DB::table("skuImagens")->where("skuId","=",$skuId)->count()<=0)
+            {
+                $data["principal"]=1;
+            }
+            DB::table("skuImagens")->insert([
+                    "id"=>$imagemId,"skuId"=>$skuId,"nome"=>$data["nome"],"legenda"=>$data["legenda"],"url"=>$data["url"],"principal"=>$data["principal"] 
+            ]);
+            $imagens = DB::table("skuImagens")->where("skuId","=",$skuId)->get();
+            return response()->json(["code"=>202,"success"=>true,"data"=> $imagens ]);
+        } 
+        catch (\Exception $e) 
+        {
+            return response()->json(["code"=>202,"success"=>false,"message" => $e->getMessage()]);
         }
     }
 

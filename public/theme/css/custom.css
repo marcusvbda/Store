@@ -1,0 +1,82 @@
+.banner-custom
+{
+    background: url(../images/banner.jpg)no-repeat right top!important;
+    color :black!important;
+}
+
+.banner-top em
+{
+	background : black!important;
+}
+
+.banner-top h2 a
+{
+ 	color :#67D1D6!important;
+}
+
+.banner-top h2
+{
+	color : black!important;
+}
+
+.banner-custom h1
+{
+	color :black!important;
+}
+
+.buy-now-custom 
+{
+    color: #67D1D6!important;
+    border-bottom: 2px solid #67D1D6!important;
+}
+
+.aqua 
+{
+    color: #67D1D6!important;
+}
+
+.aquahover:hover
+{
+	color: #67D1D6!important;
+}
+
+.lineaqua
+{
+	background-color:  #67D1D6!important;
+}
+
+
+.aquasearch
+{
+	background-color:  #67D1D6!important;
+	color : white!important;
+}
+
+.colorbar
+{
+	background:  #67D1D6!important;
+}
+
+.footer-middle-in input[type="submit"]
+{
+	background-color:  #67D1D6!important;
+}
+
+.color1:hover
+{
+	background-color:  #67D1D6!important;
+}
+
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus
+{
+	background-color:  #67D1D6!important;
+}
+
+#Choco_close
+{
+	background-image: url("images/close.png")!important;
+}
+
+
+
+

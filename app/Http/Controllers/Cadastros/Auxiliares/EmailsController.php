@@ -47,22 +47,7 @@ class EmailsController extends DefaultCrudController
         }
     }
 
-    public function uploadImagem(Request $request)
-    {
-        try 
-        {
-            $image = $request->file('image');
-            $name = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('/upload/imgs');
-            $image->move($destinationPath, $name);
-            $url = asset("public/upload/imgs/{$name}");
-            return response()->json(["code"=>202,"success"=>true,"data"=>$url]);
-        } 
-        catch (\Exception $e) 
-        {
-            return response()->json(["code"=>202,"success"=>false,"message" => $e->getMessage()]);
-        }
-    }
+    
 
     
 

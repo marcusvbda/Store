@@ -21,6 +21,7 @@ class Skus extends Migration
             $table->string('nome',100)->unique();
             $table->string('ean',100)->nullable()->unique();
             $table->string('codRef',100)->nullable();
+            $table->string('ncm',30)->nullable();
             $table->string('produtoId',50)->index();
             $table->foreign('produtoId')
                 ->references('id')
@@ -33,6 +34,10 @@ class Skus extends Migration
             $table->boolean('ativo')->default(0);
             $table->date('dataCadastro');
             $table->time('horaCadastro');
+            $table->double('estoqueReal', 15, 8)->default(0);
+            $table->double('estoqueAtual', 15, 8)->default(0);
+            $table->double('multiplicadorUnd', 15, 8)->default(1);
+            $table->string('fornecedorId',50)->nullable();
         });
     }
 

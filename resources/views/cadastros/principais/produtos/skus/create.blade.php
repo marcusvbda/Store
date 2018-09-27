@@ -31,21 +31,13 @@
 
                     <form id="frm" v-on:submit.prevent="cadastrar()">
                       <div class="row" style="padding-bottom: 20px;">
-                          <div class="col-md-3" style="padding-top: 20px;">
+                          <div class="col-md-4" style="padding-top: 20px;">
                             <p style="margin-bottom: 0;"><strong>Produto : </strong>{{$produto->nome}}</p>
                             <p style="margin-bottom: 0;"><strong>Cadastrado em : </strong>{{date_format(date_create($produto->dataCadastro), 'd/m/Y')}} as {{$produto->horaCadastro}}</p>
                           </div>
-                          <div class="col-md-2">
-                            <label> <span class="text-danger" v-show="((frm.ean=='')||(frm.ean==null))">*</span> Codigo de Referência</label>
-                            <input type="" class="form form-control" v-model="frm.codRef" :required="((frm.ean=='')||(frm.ean==null))">
-                          </div>
-                          <div class="col-md-3">
+                          <div class="col-md-7">
                             <label><span class="text-danger">*</span> Nome</label>
                             <input type="" class="form form-control" v-model="frm.nome" required>
-                          </div>
-                          <div class="col-md-3">
-                            <label><span class="text-danger"  v-show="((frm.codRef=='')||(frm.codRef==null))">*</span> EAN</label>
-                            <input type="" class="form form-control" v-model="frm.ean" :required="((frm.codRef=='')||(frm.codRef==null))">
                           </div>
                           <div class="col-md-1">
                             <label><span class="text-danger">*</span> Ativo</label>
@@ -54,6 +46,20 @@
                                 <option value="0">NÃO</option>
                             </select>
                           </div>
+                      </div>
+                      <div class="row" style="padding-bottom: 20px;">
+                        <div class="col-md-4">
+                          <label> <span class="text-danger" v-show="((frm.ean=='')||(frm.ean==null))">*</span> Codigo de Referência</label>
+                          <input type="" class="form form-control" v-model="frm.codRef" :required="((frm.ean=='')||(frm.ean==null))">
+                        </div>
+                        <div class="col-md-4">
+                            <label><span class="text-danger"  v-show="((frm.codRef=='')||(frm.codRef==null))">*</span> EAN</label>
+                            <input type="" class="form form-control" v-model="frm.ean" :required="((frm.codRef=='')||(frm.codRef==null))">
+                        </div>
+                        <div class="col-md-4">
+                            <label>NCM</label>
+                            <input type="" class="form form-control" v-model="frm.ncm" >
+                        </div>
                       </div>
                       <div class="row" style="padding-bottom: 20px;">
                         <div class="col-md-12">
@@ -140,6 +146,7 @@ delimiters: ["[[","]]"],
           largura : 0,
           comprimento : 0,
           ativo : 1,
+          ncm : 1,
           sugestoes : null,
           acessorios : null,
       }

@@ -4,6 +4,7 @@ Route::get('{produtoId}/sku/create', 'Cadastros\Principais\Produtos\SkuControlle
 Route::post('{produtoId}/sku/store', 'Cadastros\Principais\Produtos\SkuController@store')->name("cadastros.principais.produtos.skus.store")->middleware('can:post_produtos');
 Route::get('{produtoId}/sku/{skuId}/show', 'Cadastros\Principais\Produtos\SkuController@show')->name("cadastros.principais.produtos.skus.show")->middleware('can:get_produtos');
 Route::get('{produtoId}/sku/{skuId}/edit', 'Cadastros\Principais\Produtos\SkuController@edit')->name("cadastros.principais.produtos.skus.edit")->middleware('can:put_produtos');
+Route::put('{produtoId}/sku/{skuId}/put', 'Cadastros\Principais\Produtos\SkuController@put')->name("cadastros.principais.produtos.skus.put")->middleware('can:put_produtos');
 Route::post('{produtoId}/sku/{skuId}/uploadImagem', 'Cadastros\Principais\Produtos\SkuController@uploadImagem')->name("cadastros.principais.produtos.skus.uploadImagem")->middleware('can:put_produtos');
 Route::put('{produtoId}/sku/{skuId}/setPrincipal', 'Cadastros\Principais\Produtos\SkuController@setPrincipal')->name("cadastros.principais.produtos.skus.setPrincipal")->middleware('can:put_produtos');
 Route::delete('{produtoId}/sku/{skuId}/deleteImagem', 'Cadastros\Principais\Produtos\SkuController@deleteImagem')->name("cadastros.principais.produtos.skus.deleteImagem")->middleware('can:delete_produtos');

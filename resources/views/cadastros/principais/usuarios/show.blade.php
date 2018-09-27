@@ -10,7 +10,7 @@
 </ul>
 
 <div  style="margin-top:15px;" id="app">
-
+  
   <div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                   Você está em modo de  <strong>visualização,</strong> para poder efetuar alterações clique no botão editar abaixo.
               </div> 

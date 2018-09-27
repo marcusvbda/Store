@@ -72,6 +72,22 @@
               </ul>
             </li>
 
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Utilitários <span class="caret"></span></a>
+              <ul class="dropdown-menu preventClick'">
+                <li class="dropdown-submenu preventClick">
+                  <a style="cursor:default;">CMS</a>
+                  <ul class="dropdown-menu preventClick">
+                    <li class="dropdown-submenu preventClick">
+                      @can("get_campoPersonalizado")
+                        <li><a  onclick="openRoute('{{route('utilitarios.cms.camposPersonalizados')}}')" style="cursor:default;">Campos personalizados</a></li>
+                      @endcan
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
              <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="cursor:default;">Relatórios <span class="caret"></span></a>
               <ul class="dropdown-menu preventClick'">

@@ -8,12 +8,7 @@ Route::get('laravel-version', function()
     $laravel = app();
     return "Your Laravel version is ".$laravel::VERSION;
 });
-
-Route::get('', function() 
-{
-    return redirect( asset("admin/") );
-});
-
+require("routes/frontend/frontend.php");
 
 Route::group(['prefix' => 'default'], function () 
 {
@@ -22,3 +17,4 @@ Route::group(['prefix' => 'default'], function ()
 });
 
 Route::post('setSession', 'ParametrosController@setSession')->name("parametros.setSession");
+Route::post('uploadImagem', 'DefaultCrudController@uploadImagem')->name("default.uploadImagem");

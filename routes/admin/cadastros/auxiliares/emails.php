@@ -8,5 +8,4 @@ Route::group(['prefix' => 'cadastros/auxiliares/emails'], function ()
     Route::post('store', 'Cadastros\Auxiliares\EmailsController@store')->name("cadastros.auxiliares.emails.store")->middleware('can:post_modelos_email');
     Route::put('put', 'Cadastros\Auxiliares\EmailsController@put')->name("cadastros.auxiliares.emails.put")->middleware('can:put_modelos_email');
     Route::delete('delete', 'Cadastros\Auxiliares\EmailsController@delete')->name("cadastros.auxiliares.emails.delete")->middleware('can:delete_modelos_email');
-    Route::post('uploadImagem', 'Cadastros\Auxiliares\EmailsController@uploadImagem')->name("cadastros.auxiliares.emails.uploadImagem");
 });//modelosEmail

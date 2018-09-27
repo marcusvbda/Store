@@ -157,22 +157,28 @@ class SkuController extends Controller
         }
     }
 
-    public function put(Request $request)
+    public function put($produtoId,$skuId,Request $request)
     {
         try 
         {
             $request = $request->all();
             DB::beginTransaction();
-            $subCategorias = array_map('trim',explode(",",$request["subCategorias"] ));
-            unset($request["_token"],$request["_method"],$request["especificacoes"],$request["subCategorias"]);
-            $data = DB::table($this->table)->where("id","=",$request["id"])->update($request);
-            DB::table("produtoProdutoSubCategoria")->where("produtoId","=",$request["id"])->delete();
-            foreach($subCategorias as $sub)
+            $sugestoes = array_map('trim',explode(",",$request["sugestoes"] ));
+            $acessorios = array_map('trim',explode(",",$request["acessorios"] ));
+            unset($request["_token"],$request["_method"],$request["sugestoes"],$request["acessorios"]);
+            $data = DB::table($this->table)->where("id","=",$skuId)->update($request);
+            DB::table("skuAcessorios")->where("skuId","=",$skuId)->delete();
+            DB::table("skuSugestao")->where("skuId","=",$skuId)->delete();
+            foreach($acessorios as $acessorio)
             {
-                DB::table("produtoProdutoSubCategoria")->insert(["produtoId"=>$request["id"],"produtoSubCategoriaId"=>$sub ]);
+                DB::table("skuAcessorios")->insert(["acessorioId"=>$acessorio,"skuId"=>$skuId ]);
+            }
+            foreach($sugestoes as $sugestao)
+            {
+                DB::table("skuSugestao")->insert(["sugestaoId"=>$sugestao,"skuId"=>$skuId ]);
             }
             DB::commit();
-            return redirect()->route($this->showRoute,["id"=>$request["id"]]);
+            return redirect()->route($this->showRoute,["skuId"=>$skuId, "produtoId"=>$produtoId ]);
         } 
         catch (\Exception $e) 
         {
@@ -271,23 +277,32 @@ class SkuController extends Controller
             $data = $request->all();
             $imagemId = uniqid();
             $data["nome"]= "url_{$imagemId}";
+            $destinationPath = public_path("/upload/imgs/produtos/{$produtoId}/skus/{$skuId}");
+            
+            if(!is_dir(public_path("/upload/imgs/produtos")))
+                mkdir(public_path("/upload/imgs/produtos"),0777, true);
+            if(!is_dir(public_path("/upload/imgs/produtos/{$produtoId}")))
+                mkdir(public_path("/upload/imgs/produtos/{$produtoId}"),0777, true);
+            if(!is_dir(public_path("/upload/imgs/produtos/{$produtoId}/skus")))
+                mkdir(public_path("/upload/imgs/produtos/{$produtoId}/skus"),0777, true);
+            if(!is_dir(public_path("/upload/imgs/produtos/{$produtoId}/skus/{$skuId}")))
+                mkdir(public_path("/upload/imgs/produtos/{$produtoId}/skus/{$skuId}"),0777, true);
+
             if( $data["tipo"]=="UPLOAD" )
             {   
                 $image = $request->file('imagem');
                 $name = time().'.'.$image->getClientOriginalExtension();
-                if(!is_dir(public_path("/upload/imgs/produtos")))
-                    mkdir(public_path("/upload/imgs/produtos"),0777, true);
-                if(!is_dir(public_path("/upload/imgs/produtos/{$produtoId}")))
-                    mkdir(public_path("/upload/imgs/produtos/{$produtoId}"),0777, true);
-                if(!is_dir(public_path("/upload/imgs/produtos/{$produtoId}/skus")))
-                    mkdir(public_path("/upload/imgs/produtos/{$produtoId}/skus"),0777, true);
-                if(!is_dir(public_path("/upload/imgs/produtos/{$produtoId}/skus/{$skuId}")))
-                    mkdir(public_path("/upload/imgs/produtos/{$produtoId}/skus/{$skuId}"),0777, true);
-                $destinationPath = public_path("/upload/imgs/produtos/{$produtoId}/skus/{$skuId}");
                 $image->move($destinationPath, $name);
-                $data["url"] = asset("public/upload/imgs/produtos/{$produtoId}/skus/{$skuId}/{$name}");
                 $data["nome"]=$name;
             }
+            else
+            {
+                $name = time().'.png';
+                $data["nome"]=$name;
+                copy("http://copysupply.vteximg.com.br/arquivos/ids/155393/molde-limpo--1---1-.jpg",$destinationPath."/".$name);
+            }
+            $data["url"] = asset("public/upload/imgs/produtos/{$produtoId}/skus/{$skuId}/{$name}");
+
             if(DB::table("skuImagens")->where("skuId","=",$skuId)->count()<=0)
             {
                 $data["principal"]=1;

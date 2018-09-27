@@ -8,6 +8,7 @@ Route::group(['prefix' => 'admin'], function ()
         Route::group(['middleware' => 'tenantCheck'], function()
         {
             require ('routes/admin/cadastros/cadastros.php');
+            require ('routes/admin/utilitarios/utilitarios.php');
             require ('routes/admin/relatorios/relatorios.php');
             require ('routes/admin/parametros/parametros.php');
         });

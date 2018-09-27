@@ -16,6 +16,12 @@
 
     <div id="app">
         <div class="row">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            Preencha o formulário de filtros a <strong>esquerda</strong> e clique em <strong>filtrar</strong>, para gerar um PDF ou excel , clique em ações e selecione a opção desejada.
+                </div> 
+            </div>
             @include('relatorios.padrao.filtro') 
             <div class="col-md-9" style="width:78%;">
                 <div class="panel panel-default">

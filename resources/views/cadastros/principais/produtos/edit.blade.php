@@ -201,7 +201,7 @@ $(function()
           self.frm.descricaoProduto = $("#summernoteDescricao").summernote("code");
           messageBox.confirm("Confirmação","Confirma o alteração deste produto ?",function()
           {
-              vform.submit('put', '{{route("cadastros.principais.produtos.put")}}', self.frm);
+              vform.submit('put', '{{route("cadastros.principais.produtos.put",["id"=>$produto->id])}}', self.frm);
           });
         }
     }

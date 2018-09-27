@@ -97,7 +97,7 @@ function uploadImage(image)
     var data = new FormData();
     data.append("image", image);
     $.ajax({
-        url: "{{route('cadastros.auxiliares.emails.uploadImagem')}}",
+        url: "{{route('default.uploadImagem')}}",
         cache: false,
         contentType: false,
         processData: false,

@@ -13,21 +13,21 @@ class DatabaseSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 
-        $this->call(tenantsSeed::class);  
-        $this->call(gruposAcessoSeed::class);
+        // $this->call(tenantsSeed::class);  
+        // $this->call(gruposAcessoSeed::class);
         $this->call(grupoPermissaoSeed::class);
         $this->call(permissoesSeed::class);
         $this->call(gruposAcessoPermissoes::class);
-        $this->call(parametrosSeed::class);
-        $this->call(TenantParametrosSeed::class);
-        $this->call(usuariosSeed::class);
-        $this->call(TenantUsuariosSeed::class);
-        $this->call(CategoriaRelatorioSeed::class);
-        $this->call(RelatorioSeed::class);
-        $this->call(ModeloEmailSeed::class);
-        $this->call(marcasSeed::class);
-        $this->call(produtoCategoriaSeed::class);
-        $this->call(especificacoesProdutoSeed::class);
+        // $this->call(parametrosSeed::class);
+        // $this->call(TenantParametrosSeed::class);
+        // $this->call(usuariosSeed::class);
+        // $this->call(TenantUsuariosSeed::class);
+        // $this->call(CategoriaRelatorioSeed::class);
+        // $this->call(RelatorioSeed::class);
+        // $this->call(ModeloEmailSeed::class);
+        // $this->call(marcasSeed::class);
+        // $this->call(produtoCategoriaSeed::class);
+        // $this->call(especificacoesProdutoSeed::class);
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
@@ -135,6 +135,7 @@ class grupoPermissaoSeed extends Seeder
         DB::table('grupoPermissao')->insert(["id" => uniqid(), "descricao" => "Modelos de email" ]); 
         DB::table('grupoPermissao')->insert(["id" => uniqid(), "descricao" => "Relatórios" ]); 
         DB::table('grupoPermissao')->insert(["id" => uniqid(), "descricao" => "Produtos" ]); 
+        DB::table('grupoPermissao')->insert(["id" => uniqid(), "descricao" => "CMS" ]); 
     }
 }
 
@@ -187,6 +188,12 @@ class permissoesSeed extends Seeder
         DB::table('permissoes')->insert(["id"=>uniqid(), "grupoPermissaoId"=> $grupos[6]->id,"nome" => "post_especificacaoProduto", "descricao" => "Cadastrar especificações de produto"]);
         DB::table('permissoes')->insert(["id"=>uniqid(), "grupoPermissaoId"=> $grupos[6]->id,"nome" => "put_especificacaoProduto", "descricao" => "Alterar especificações de produto"]);
         DB::table('permissoes')->insert(["id"=>uniqid(), "grupoPermissaoId"=> $grupos[6]->id,"nome" => "delete_especificacaoProduto", "descricao" => "Acesso as especificações de produto"]);
+
+        DB::table('permissoes')->insert(["id"=>uniqid(), "grupoPermissaoId"=> $grupos[7]->id,"nome" => "get_campoPersonalizado", "descricao" => "Acesso aos campos personalizados"]);
+        DB::table('permissoes')->insert(["id"=>uniqid(), "grupoPermissaoId"=> $grupos[7]->id,"nome" => "post_campoPersonalizado", "descricao" => "Cadastrar campos personalizados"]);
+        DB::table('permissoes')->insert(["id"=>uniqid(), "grupoPermissaoId"=> $grupos[7]->id,"nome" => "put_campoPersonalizado", "descricao" => "Alterar campos personalizados"]);
+        DB::table('permissoes')->insert(["id"=>uniqid(), "grupoPermissaoId"=> $grupos[7]->id,"nome" => "delete_campoPersonalizado", "descricao" => "Excluir campos personalizados"]);
+
     }
 }
 

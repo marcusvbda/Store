@@ -60,5 +60,11 @@
     Vue.use(VueMask.VueMaskPlugin);
 </script>
 @yield('body')   
-    
+<script type="text/javascript">
+    @if(isset($mensagens))
+        @foreach($mensagens as $msg)
+            toastr.{{$msg["tipo"]}}("{{$msg['mensagem']}}");
+        @endforeach
+    @endif
+</script>
 </html>

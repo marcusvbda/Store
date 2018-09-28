@@ -28,8 +28,8 @@
                                   <a onclick="loadingElement(this);openRoute('{{route('cadastros.principais.produtos.skus.create',['produtoId'=>$produto->id])}}')"class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span> Cadastrar SKU</a>
                               @endcan
                             </th>
-                            <th style="display: none;">id</th>
-                            <th style="width:1%;" class="no-sort text-center">Imagem principal</th>
+                            <th style="width:1%;" class="no-sort text-center"></th>
+                            <th style="width:10%;">id</th>
                             <th style="width:20%;">Nome</th>
                             <th>EAN</th>
                             <th class="text-center" width="1%">Status</th>
@@ -37,9 +37,11 @@
                         </tr>
                           <thead>
                               <tr>
+                                  <th></th>
                                   <th style="width:1%;"></th>
-                                  <th style="display: none;">id</th>
-                                  <th style="width:1%;"></th>
+                                  <th style="width:10%;">
+                                      <input type="text" class="form form-control input-sm" style="width:100%" name="id" value="{{$id}}">
+                                  </th>
                                   <th>
                                       <input type="text" class="form form-control input-sm" style="width:100%" name="nome" value="{{$nome}}">
                                   </th>
@@ -86,10 +88,11 @@
                                 </ul>
                               </div>
                             </td>
-                            <td style="display:none;">{{$d->id}}</td>
+                            
                             <td class="text-center">
-                                <img src="{{$self->getPrincipalImg($d->id)}}" style="height: 50px;">
+                              <img src="{{$self->getPrincipalImg($d->id)}}" style="height: 50px;">
                             </td>
+                            <td style="padding-top: 20px;width:10%;">{{$d->id}}</td>
                             <td style="padding-top: 20px;">{{$d->nome}}</td>
                             <td style="padding-top: 20px;">{{$d->ean}}</td>
                             <td style="padding-top: 20px;"  class="text-center" width="1%">
@@ -140,7 +143,7 @@ var app = new Vue(
   }
 });
 var dtable = new dataTableCrud({
-    order : 1,
+    order : 2,
     table : "#table",
     onload : function()
     {

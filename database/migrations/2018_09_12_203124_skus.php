@@ -18,8 +18,8 @@ class Skus extends Migration
             $table->charset = 'utf8';
             $table->collation = 'utf8_unicode_ci';
             $table->string('id',50)->unique()->index()->primary();
-            $table->string('nome',100)->unique();
-            $table->string('ean',100)->nullable()->unique();
+            $table->string('nome',100)->nullable();
+            $table->string('ean',100)->nullable();
             $table->string('codRef',100)->nullable();
             $table->string('ncm',30)->nullable();
             $table->string('produtoId',50)->index();
@@ -37,7 +37,7 @@ class Skus extends Migration
             $table->double('estoqueReal', 15, 8)->default(0);
             $table->double('estoqueAtual', 15, 8)->default(0);
             $table->double('multiplicadorUnd', 15, 8)->default(1);
-            $table->string('fornecedorId',50)->nullable();
+            $table->string('codigoFabricante',50)->nullable();
         });
     }
 

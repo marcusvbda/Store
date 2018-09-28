@@ -21,12 +21,11 @@ class ProdutoProdutoSubCategoria extends Migration
             $table->foreign('produtoSubCategoriaId','fk_produtoSubCat')
                 ->references('id')
                 ->on('produtoSubCategoria')
-                ->onDelete('restrict');      
+                ->onDelete('cascade');      
             $table->string('produtoId',50)->index();
             $table->foreign('produtoId','fk_produtoSubProd')
                 ->references('id')
-                ->on('produtos')
-                ->onDelete('restrict');
+                ->on('produtos');
 
             $table->primary(['produtoSubCategoriaId', 'produtoId'],'pksub');            
         });

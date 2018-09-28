@@ -14,7 +14,8 @@ Route::group(['prefix' => 'cadastros/produtos'], function ()
     require ('routes/admin/cadastros/produtos/especificacoes.php');
 
 
-	Route::get('teste', 'Cadastros\Principais\Produtos\ProdutosController@teste')->name("cadastros.principais.produtos.teste");
+	Route::post('upload', 'Cadastros\Principais\Produtos\ProdutosController@upload')->name("cadastros.principais.produtos.upload")->middleware('can:post_produtos');
+	Route::post('confirm', 'Cadastros\Principais\Produtos\ProdutosController@confirmarUpload')->name("cadastros.principais.produtos.confirmarUpload")->middleware('can:post_produtos');
 
 
 

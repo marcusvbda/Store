@@ -13,21 +13,21 @@ class DatabaseSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 
-        // $this->call(tenantsSeed::class);  
-        // $this->call(gruposAcessoSeed::class);
+        $this->call(tenantsSeed::class);  
+        $this->call(gruposAcessoSeed::class);
         $this->call(grupoPermissaoSeed::class);
         $this->call(permissoesSeed::class);
         $this->call(gruposAcessoPermissoes::class);
-        // $this->call(parametrosSeed::class);
-        // $this->call(TenantParametrosSeed::class);
-        // $this->call(usuariosSeed::class);
-        // $this->call(TenantUsuariosSeed::class);
-        // $this->call(CategoriaRelatorioSeed::class);
-        // $this->call(RelatorioSeed::class);
-        // $this->call(ModeloEmailSeed::class);
-        // $this->call(marcasSeed::class);
-        // $this->call(produtoCategoriaSeed::class);
-        // $this->call(especificacoesProdutoSeed::class);
+        $this->call(parametrosSeed::class);
+        $this->call(TenantParametrosSeed::class);
+        $this->call(usuariosSeed::class);
+        $this->call(TenantUsuariosSeed::class);
+        $this->call(CategoriaRelatorioSeed::class);
+        $this->call(RelatorioSeed::class);
+        $this->call(ModeloEmailSeed::class);
+        $this->call(marcasSeed::class);
+        $this->call(produtoCategoriaSeed::class);
+        $this->call(especificacoesProdutoSeed::class);
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
@@ -54,24 +54,24 @@ class produtoCategoriaSeed extends Seeder
     public function run()
     {
         DB::table('produtoCategoria')->truncate();
-        $id =  uniqid();
-        DB::table('produtoCategoria')->insert(
-        [
-            "id"          => $id,
-            "nome"        => "IMPRESSORA"
-        ]);
-        DB::table('produtoSubCategoria')->insert(
-        [
-            "id"          => uniqid(),
-            "categoriaid" => $id,
-            "nome"        => "JATO DE TINTA"
-        ]);
-        DB::table('produtoSubCategoria')->insert(
-        [
-            "id"          => uniqid(),
-            "categoriaid" => $id,
-            "nome"        => "LASER"
-        ]);
+        // $id =  uniqid();
+        // DB::table('produtoCategoria')->insert(
+        // [
+        //     "id"          => $id,
+        //     "nome"        => "IMPRESSORA"
+        // ]);
+        // DB::table('produtoSubCategoria')->insert(
+        // [
+        //     "id"          => uniqid(),
+        //     "categoriaid" => $id,
+        //     "nome"        => "JATO DE TINTA"
+        // ]);
+        // DB::table('produtoSubCategoria')->insert(
+        // [
+        //     "id"          => uniqid(),
+        //     "categoriaid" => $id,
+        //     "nome"        => "LASER"
+        // ]);
     }
 }
 
@@ -80,16 +80,16 @@ class marcasSeed extends Seeder
     public function run()
     {
         DB::table('produtoMarca')->truncate();
-        DB::table('produtoMarca')->insert(
-        [
-            "id"          => uniqid(),
-            "nome"        => "Xerox"
-        ]);
-        DB::table('produtoMarca')->insert(
-        [
-            "id"          => uniqid(),
-            "nome"        => "Brother"
-        ]);
+        // DB::table('produtoMarca')->insert(
+        // [
+        //     "id"          => uniqid(),
+        //     "nome"        => "Xerox"
+        // ]);
+        // DB::table('produtoMarca')->insert(
+        // [
+        //     "id"          => uniqid(),
+        //     "nome"        => "Brother"
+        // ]);
     }
 }
 

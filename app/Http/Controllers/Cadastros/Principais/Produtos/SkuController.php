@@ -32,9 +32,10 @@ class SkuController extends Controller
             $request = $request->all();
             $nome = "";
             $ean  = "";
+            $id  = "";
             $ativo  = null;
-            $data = DB::table("skus")
-                ->select("skus.*");
+            $data = DB::table("skus")->where("produtoId","=",$produtoId);
+
             if(!empty($request["nome"]))
             {
                 $nome = $request["nome"];
@@ -50,10 +51,15 @@ class SkuController extends Controller
                 $ativo = $request["ativo"];
                 $data = $data->where("skus.ativo","=",$ativo);                
             }
+            if(isset($request["id"]))
+            {
+                $id = $request["id"];
+                $data = $data->where("skus.id","=",$id);                
+            }
             $data = $data->get();
             $produto = DB::table("produtos")->find($produtoId);
             $self = $this;
-            return view($this->principalView,compact('self','produto','data','nome','ean','ativo'));
+            return view($this->principalView,compact('self','produto','data','nome','ean','ativo','id'));
         } 
         catch (\Exception $e) 
         {
@@ -299,7 +305,8 @@ class SkuController extends Controller
             {
                 $name = time().'.png';
                 $data["nome"]=$name;
-                copy("http://copysupply.vteximg.com.br/arquivos/ids/155393/molde-limpo--1---1-.jpg",$destinationPath."/".$name);
+                $imagem = file_get_contents("http://".$data["url"]);
+                file_put_contents($destinationPath."/".$name, $imagem);
             }
             $data["url"] = asset("public/upload/imgs/produtos/{$produtoId}/skus/{$skuId}/{$name}");
 

@@ -48,11 +48,15 @@
                       <div class="row"  style="padding-bottom: 10px;">
                           <div class="col-md-6">
                             <label>Descrição do produto</label>
-                            <textarea class="summernote form form-control" cols="50" rows="2" v-model="frm.descricaoProduto" id="summernoteDescricao"  readonly disabled></textarea>
+                            <textarea class="summernote form form-control" cols="50" rows="2" v-model="frm.descricaoProduto" id="summernoteDescricao"  readonly disabled>
+                              {!! $produto->descricaoProduto !!}
+                            </textarea>
                           </div>
                           <div class="col-md-6">
                             <label>Descrição (Meta Tag Description)</label>
-                            <textarea class="form form-control" cols="50" rows="2"  v-model="frm.descricaoMeta"  readonly disabled></textarea>
+                            <textarea class="form form-control" cols="50" rows="2"  v-model="frm.descricaoMeta" id="descricaoMeta"  readonly disabled>
+                              {!! $produto->descricaoMeta !!}
+                            </textarea>
                           </div>
                       </div>
                       <div class="row" style="padding-bottom: 10px;">
@@ -115,8 +119,8 @@
             textLink : "{{$produto->textLink}}",
             palavrasSubstitutas : "{{$produto->palavrasSubstitutas}}",
             tituloPagina : "{{$produto->tituloPagina}}",
-            descricaoProduto : "{{$produto->descricaoProduto}}",
-            descricaoMeta : "{{$produto->descricaoMeta}}",
+            descricaoProduto : $("#summernoteDescricao").val(),
+            descricaoMeta : $("#descricaoMeta").val(),
             subCategorias : "{{implode(',',$subsSelecionados)}}",
             categoriaId : "{{$produto->categoriaId}}",
             marcaId : "{{$produto->marcaId}}"
@@ -139,10 +143,8 @@
     ],
   });
 
-  $('#summernoteDescricao').summernote("code",'{!! $produto->descricaoProduto !!}');
+  $('#summernoteDescricao').summernote("code",$("#summernoteDescricao").val());
   $('#summernoteDescricao').summernote('disable');
-  app.changeCategoria(false);
-
 </script>
 
 @stop

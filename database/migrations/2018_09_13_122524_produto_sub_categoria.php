@@ -23,7 +23,7 @@ class ProdutoSubCategoria extends Migration
             $table->foreign('categoriaId')
                 ->references('id')
                 ->on('produtoCategoria')
-                ->onDelete('cascade');   
+                ->onDelete('no action');   
             $table->primary(['id', 'categoriaId','nome']);       
         });
     }
